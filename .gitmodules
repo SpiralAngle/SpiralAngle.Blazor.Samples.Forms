@@ -1,0 +1,3 @@
+[submodule "SpiralAngle.Blazor.Extensions"]
+	path = SpiralAngle.Blazor.Extensions
+	url = https://github.com/SpiralAngle/SpiralAngle.Blazor.Extensions.git
