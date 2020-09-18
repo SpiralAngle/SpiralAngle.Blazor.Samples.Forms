@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazorFormSample.Shared
 {
-    public class InventoryItem
+    public class ItemInventory
     {
+        [Key]
+        public Guid ItemInventoryId { get; set; }
+
         [Required]
         public Item Item { get; set; }
 

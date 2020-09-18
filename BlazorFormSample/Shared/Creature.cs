@@ -7,6 +7,9 @@ namespace BlazorFormSample.Shared
 {
     public class Creature
     {
+        [Key]
+        public Guid CreatureId { get; set; }
+
         [Required]
         [RegularExpression("^(?! )[A-Za-z0-9 \']*(?<! )$")]
         public string Name{ get; set; }
@@ -45,11 +48,11 @@ namespace BlazorFormSample.Shared
 
         public string Description { get; set; }
         
-        public IList<InventoryItem> InventoryItems { get; set; }
+        public IList<ItemInventory> InventoryItems { get; set; }
 
         public Creature()
         {
-            InventoryItems = new List<InventoryItem>();
+            InventoryItems = new List<ItemInventory>();
         }
     }
 }
