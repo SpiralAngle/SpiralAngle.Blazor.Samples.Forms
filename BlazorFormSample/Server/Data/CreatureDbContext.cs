@@ -13,6 +13,9 @@ namespace BlazorFormSample.Server.Data
         public DbSet<Creature> Creatures { get; set; }
         public DbSet<ItemInventory> InventoryItems { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<CreatureSkill> CreatureSkills { get; set; }
+        public DbSet<Skill> Skills { get; set; }
+        public DbSet<SkillGroup> SkillGroups { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=BlazorFormSample");

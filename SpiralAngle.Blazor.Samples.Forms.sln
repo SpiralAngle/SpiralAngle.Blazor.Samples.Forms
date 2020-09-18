@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BlazorFormSample.Data", "BlazorFormSample\Data\BlazorFormSample.Data.sqlproj", "{279CE410-BC6B-4B58-8BAC-A712C8CC50B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorFormSample.Data.Migrations", "BlazorFormSample\Data\Migration\BlazorFormSample.Data.Migrations.csproj", "{3FF77A3E-0A76-4EB8-9794-7A39F9BB880A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,12 +43,10 @@ Global
 		{6DDA6BD5-8377-4662-B818-59B5E90CAFF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DDA6BD5-8377-4662-B818-59B5E90CAFF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DDA6BD5-8377-4662-B818-59B5E90CAFF8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{279CE410-BC6B-4B58-8BAC-A712C8CC50B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{279CE410-BC6B-4B58-8BAC-A712C8CC50B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{279CE410-BC6B-4B58-8BAC-A712C8CC50B9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{279CE410-BC6B-4B58-8BAC-A712C8CC50B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{279CE410-BC6B-4B58-8BAC-A712C8CC50B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{279CE410-BC6B-4B58-8BAC-A712C8CC50B9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3FF77A3E-0A76-4EB8-9794-7A39F9BB880A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FF77A3E-0A76-4EB8-9794-7A39F9BB880A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FF77A3E-0A76-4EB8-9794-7A39F9BB880A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF77A3E-0A76-4EB8-9794-7A39F9BB880A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
