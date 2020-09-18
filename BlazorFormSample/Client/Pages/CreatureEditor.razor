@@ -1,0 +1,124 @@
+﻿@using BlazorFormSample.Shared
+@using SpiralAngle.Blazor.Extensions.Forms
+@page "/creature"
+@implements System.IDisposable
+@if (Creature != null)
+{
+    <EditForm EditContext="@editContext">
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="name">Name</label>
+            <InputText class="form-control-lg col-2 align-middle" id="name" @bind-Value="Creature.Name" @bind-disabled="ReadOnly"></InputText>
+        </div>
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="race">Race</label>
+            <InputText class="form-control-sm col-2 align-middle" id="race" @bind-Value="Creature.Race" @bind-disabled="ReadOnly"></InputText>
+            <label class="col-1 align-middle col-form-label-sm  form-label-sm" label-for="class">Class</label>
+            <InputText class="form-control-sm col-2 align-middle" id="class" @bind-Value="Creature.Class" @bind-disabled="ReadOnly"></InputText>
+        </div>
+
+        <fieldset>
+            <div class="form-row">
+                <label class="col-1 align-middle col-form-label-sm" label-for="strength">Strength</label>
+                <InputNumber class="form-control col-2 align-middle" id="strength" @bind-Value="Creature.Strength" @bind-disabled="ReadOnly"></InputNumber>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle col-form-label-sm" label-for="dexterity">Dexterity</label>
+                <InputNumber class="form-control col-2 align-middle" id="dexterity" @bind-Value="Creature.Dexterity" @bind-disabled="ReadOnly"></InputNumber>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle col-form-label-sm" label-for="constitution">Constitution</label>
+                <InputNumber class="form-control col-2 align-middle" id="constitution" @bind-Value="Creature.Constitution" @bind-disabled="ReadOnly"></InputNumber>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle align-middle col-form-label-sm" label-for="intelligence">Intelligence</label>
+                <InputNumber class="form-control col-2 align-middle" id="intelligence" @bind-Value="Creature.Intelligence" @bind-disabled="ReadOnly"></InputNumber>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle col-form-label-sm" label-for="wisdom">Wisdom</label>
+                <InputNumber class="form-control col-2 align-middle" id="wisdom" @bind-Value="Creature.Wisdom" @bind-disabled="ReadOnly"></InputNumber>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle col-form-label-sm" label-for="charisma">Charisma</label>
+                <InputNumber class="form-control col-2 align-middle" id="charisma" @bind-Value="Creature.Charisma" @bind-disabled="ReadOnly"></InputNumber>
+            </div>
+        </fieldset>
+ 
+        <div class="card-columns">
+            <div class="card">
+                <label class="align-middle form-label" label-for="Description">Description</label>
+                <InputTextArea class="form-control" id="description" @bind-Value="Creature.Description" @bind-disabled="ReadOnly"></InputTextArea>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="form-row">
+                            <span class="col-3">Name</span>
+                            <span class="col-3">Item Weight</span>
+                            <span class="col-3">Quantity</span>
+                            <span class="col-3">Total Weight</span>
+                        </div>
+                        @foreach (var item in Creature.InventoryItems)
+                        {
+                            <div class="form-row">
+                                <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Item.Name" @bind-disabled="ReadOnly"></InputText>
+                                <InputNumber class="form-control-sm col-3 align-middle" @bind-Value="item.Item.Weight" @bind-disabled="ReadOnly"></InputNumber>
+                                <InputNumber class="form-control-sm col-3 align-middle" @bind-Value="item.Quantity" @bind-disabled="ReadOnly"></InputNumber>
+                                <input type="number" class="form-control-sm col-3 align-middle float-right" disabled value="@item.Weight" />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer"><span class="oi oi-plus" aria-label="Add Item" @onclick="AddItem" hidden="@(ReadOnly)"></span></div>
+            </div>
+        </div>
+        <footer>
+            <button class="col-1 btn btn-success" type="submit" hidden="@ReadOnly" disabled="@(!editContext.IsModified())">Save</button>
+            <button class="col-1 btn btn-outline-secondary" @onclick="Cancel" type="button" hidden="@ReadOnly">Cancel</button>
+            <button class="col-1 btn btn-primary" @onclick="@(a => ReadOnly = false)" hidden="@(!ReadOnly)">Edit</button>
+        </footer>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </EditForm>
+    <div>@lastChange</div>
+}
+else
+{
+    <p class="progress-bar-animated">Loading...</p>
+}
+
+@code {
+    public bool ReadOnly { get; set; }
+    public Creature Creature { get; set; }
+    private EditContext editContext;
+    private string lastChange;
+    protected override void OnInitialized()
+    {
+        ReadOnly = true;
+        Creature = new Creature();
+        editContext = new EditContext(Creature);
+        editContext.OnFieldChanged += FieldChanged;
+        base.OnInitialized();
+    }
+
+    private void AddItem()
+    {
+        Creature.InventoryItems.Add(new InventoryItem { Item = new Item() });
+        editContext.NotifyFieldChanged(editContext.Field("InventoryItems"));
+    }
+
+    private void Cancel()
+    {
+        
+    }
+
+    private void FieldChanged(object sender, FieldChangedEventArgs e)
+    {
+        lastChange = $"{e.FieldIdentifier.FieldName}:{e.FieldIdentifier.GetValue()}";
+    }
+
+    public void Dispose()
+    {
+        editContext.OnFieldChanged -= FieldChanged;
+
+    }
+}
