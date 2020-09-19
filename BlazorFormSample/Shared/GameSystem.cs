@@ -1,24 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+
 
 namespace BlazorFormSample.Shared
 {
-    public class Item
+    public class GameSystem
     {
         [Key]
-        [Column("ItemId")]
+        [Column("GameSystemId")]
         public Guid Id { get; set; }
 
         [Required]
-        [RegularExpression("^(?! )[A-Za-z0-9 \']*(?<! )$")]
+        [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public decimal Weight { get; set; }
+        public string Version { get; set; }
 
-        [Required]
-        public GameSystem GameSystem { get; set; }
     }
 }

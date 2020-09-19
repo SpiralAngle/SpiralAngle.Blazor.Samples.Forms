@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using BlazorFormSample.Server.Data;
 
 namespace BlazorFormSample.Server
 {
@@ -25,11 +27,15 @@ namespace BlazorFormSample.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDbContext<CreatureDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CreatureDatabase")));
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -45,6 +51,11 @@ namespace BlazorFormSample.Server
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 

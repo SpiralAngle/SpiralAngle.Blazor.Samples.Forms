@@ -94,7 +94,7 @@ else
     protected override void OnInitialized()
     {
         ReadOnly = true;
-        Creature = new Creature();
+        Creature = new Creature { Id = Guid.NewGuid() };
         editContext = new EditContext(Creature);
         editContext.OnFieldChanged += FieldChanged;
         base.OnInitialized();
@@ -102,13 +102,13 @@ else
 
     private void AddItem()
     {
-        Creature.InventoryItems.Add(new InventoryItem { Item = new Item() });
+        Creature.InventoryItems.Add(new ItemInventory { Id = Guid.NewGuid(), Item = new Item { Id = Guid.NewGuid() } });
         editContext.NotifyFieldChanged(editContext.Field("InventoryItems"));
     }
 
     private void Cancel()
     {
-        
+
     }
 
     private void FieldChanged(object sender, FieldChangedEventArgs e)

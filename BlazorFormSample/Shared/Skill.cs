@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorFormSample.Shared
 {
-    public class Item
+    public class Skill
     {
+
         [Key]
-        [Column("ItemId")]
+        [Column("SkillId")]
         public Guid Id { get; set; }
 
         [Required]
@@ -15,10 +16,6 @@ namespace BlazorFormSample.Shared
         public string Name { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public decimal Weight { get; set; }
-
-        [Required]
-        public GameSystem GameSystem { get; set; }
+        public SkillGroup SkillGroup { get; set; }
     }
 }
