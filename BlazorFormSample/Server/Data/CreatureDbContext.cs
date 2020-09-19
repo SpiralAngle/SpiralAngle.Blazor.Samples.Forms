@@ -1,10 +1,6 @@
 ﻿using BlazorFormSample.Shared;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace BlazorFormSample.Server.Data
 {
@@ -16,8 +12,9 @@ namespace BlazorFormSample.Server.Data
         public DbSet<CreatureSkill> CreatureSkills { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<SkillGroup> SkillGroups { get; set; }
+        public DbSet<GameSystem> GameSystems { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=BlazorFormSample");
+        public CreatureDbContext(DbContextOptions<CreatureDbContext> options) : base(options)
+        { }
     }
 }

@@ -14,5 +14,8 @@ namespace BlazorFormSample.Shared
         [Required]
         [RegularExpression("^(?! )[A-Za-z0-9 \']*(?<! )$")]
         public string Name { get; set; }
+
+        [Required]
+        public GameSystem GameSystem { get; set; }
     }
 }

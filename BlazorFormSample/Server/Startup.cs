@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using BlazorFormSample.Server.Data;
 
 namespace BlazorFormSample.Server
 {
@@ -25,6 +27,7 @@ namespace BlazorFormSample.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDbContext<CreatureDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CreatureDatabase")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
