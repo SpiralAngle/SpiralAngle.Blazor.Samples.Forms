@@ -8,11 +8,25 @@ namespace BlazorFormSample.Data.Migrations.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "GameSystems",
+                columns: table => new
+                {
+                    GameSystemId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Version = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameSystems", x => x.GameSystemId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Creatures",
                 columns: table => new
                 {
                     CreatureId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: false),
+                    GameSystemId = table.Column<Guid>(nullable: false),
                     Race = table.Column<string>(nullable: false),
                     Class = table.Column<string>(nullable: false),
                     Strength = table.Column<int>(nullable: false),
@@ -26,6 +40,12 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Creatures", x => x.CreatureId);
+                    table.ForeignKey(
+                        name: "FK_Creatures_GameSystems_GameSystemId",
+                        column: x => x.GameSystemId,
+                        principalTable: "GameSystems",
+                        principalColumn: "GameSystemId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,11 +54,18 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                 {
                     ItemId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Weight = table.Column<decimal>(nullable: false)
+                    Weight = table.Column<decimal>(nullable: false),
+                    GameSystemId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.ItemId);
+                    table.ForeignKey(
+                        name: "FK_Items_GameSystems_GameSystemId",
+                        column: x => x.GameSystemId,
+                        principalTable: "GameSystems",
+                        principalColumn: "GameSystemId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,11 +73,18 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                 columns: table => new
                 {
                     SkillGroupId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    GameSystemId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SkillGroups", x => x.SkillGroupId);
+                    table.ForeignKey(
+                        name: "FK_SkillGroups_GameSystems_GameSystemId",
+                        column: x => x.GameSystemId,
+                        principalTable: "GameSystems",
+                        principalColumn: "GameSystemId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,6 +152,11 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Creatures_GameSystemId",
+                table: "Creatures",
+                column: "GameSystemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CreatureSkills_SkillId",
                 table: "CreatureSkills",
                 column: "SkillId");
@@ -131,6 +170,16 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                 name: "IX_InventoryItems_ItemId",
                 table: "InventoryItems",
                 column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_GameSystemId",
+                table: "Items",
+                column: "GameSystemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SkillGroups_GameSystemId",
+                table: "SkillGroups",
+                column: "GameSystemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Skills_SkillGroupId",
@@ -157,6 +206,9 @@ namespace BlazorFormSample.Data.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "SkillGroups");
+
+            migrationBuilder.DropTable(
+                name: "GameSystems");
         }
     }
 }

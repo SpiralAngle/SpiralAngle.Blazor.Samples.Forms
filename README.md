@@ -34,20 +34,20 @@ From the BlazorFormSample/Data/Migrations folder:
 ```shell
 dotnet tool install --global dotnet-ef
 dotnet add package Microsoft.EntityFrameworkCore.Design
-dotnet ef database update
+dotnet ef database update -c CreatureMigrationDbContext
 ```
 
 ### Updating Local Subsequently
 
 ```shell
-dotnet ef database update
+dotnet ef database update -c CreatureMigrationDbContext
 ```
 
 ### Adding Migrations
 
 ```shell
-dotnet ef migrations add [descriptive name]
-dotnet ef migrations script --idempotent --output idempotent.sql
+dotnet ef migrations add [descriptive name] -c CreatureMigrationDbContext
+dotnet ef migrations script --idempotent --output idempotent.sql -c CreatureMigrationDbContext
 ```
 
 The first line adds a new migration, the second regenerates a sql file that can be used to stand the whole DB up w/out requiring dotnet ef installed.
@@ -60,6 +60,9 @@ In terms of reliability, running the migration at startup means its running at a
 
 Because this is a sample project intended to show a practical project, it should use a practical db migration, so it's not using the self-update. Unfortunately, the documentation for how you do this is terrible and it turns out the tools just fight it all the way.
 
-Still need to work on the config settings for the connection string though , this still in development!
+Still need to work on the config settings for the connection string though , this still in development! Right now, the migrations project is not very reliable with environment variables, the appsettings is more reliable.
 
 To set the database, either provide an appsettings.json or set an environment variable.
+
+**Note** This still seems to require a context that derives from the main one to be placed in the Migrations project, so you'll see this in the Migrations project.
+

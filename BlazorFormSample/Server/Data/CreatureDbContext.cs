@@ -16,5 +16,7 @@ namespace BlazorFormSample.Server.Data
 
         public CreatureDbContext(DbContextOptions<CreatureDbContext> options) : base(options)
         { }
+        protected CreatureDbContext(DbContextOptions options) : base(options)
+        { }
     }
 }

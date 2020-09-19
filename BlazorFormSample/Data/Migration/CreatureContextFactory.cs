@@ -1,5 +1,4 @@
-﻿using BlazorFormSample.Server.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
@@ -7,12 +6,12 @@ using System;
 
 namespace BlazorFormSample.Data.Migrations
 {
-    public class CreatureContextFactory : IDesignTimeDbContextFactory<CreatureDbContext>
+    public class CreatureContextFactory : IDesignTimeDbContextFactory<CreatureMigrationDbContext>
     {
         private const string defaultDB = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=BlazorFormSample";
-        public CreatureDbContext CreateDbContext(string[] args)
+        public CreatureMigrationDbContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<CreatureDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<CreatureMigrationDbContext>();
             var builder = new ConfigurationBuilder();
             builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             builder.AddEnvironmentVariables();
@@ -27,7 +26,7 @@ namespace BlazorFormSample.Data.Migrations
                 ?? defaultDB;
             System.Diagnostics.Debug.WriteLine(constr);
             optionsBuilder.UseSqlServer(constr);            
-            return new CreatureDbContext(optionsBuilder.Options);
+            return new CreatureMigrationDbContext(optionsBuilder.Options);
         }
     }
 }

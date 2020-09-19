@@ -14,7 +14,7 @@ namespace BlazorFormSample.Shared
         public Guid Id { get; set; }
 
         [Required]
-        [RegularExpression("^(?! )[A-Za-z0-9 \']*(?<! )$")]
+        [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
 
         [Required]
