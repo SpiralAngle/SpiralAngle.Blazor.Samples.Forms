@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis;
 
 namespace BlazorFormSample.Server.Controllers
 {
@@ -37,11 +38,7 @@ namespace BlazorFormSample.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GameSystem>> GetGameSystem(Guid id)
         {
-            var gameSystem = await _context.GameSystems
-                .Include(x => x.Roles)
-                .Include(x => x.SkillGroups)
-                .Include(x => x.Races)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var gameSystem = await GetGameSystemAsync(id);
 
             if (gameSystem == null)
             {
@@ -60,7 +57,8 @@ namespace BlazorFormSample.Server.Controllers
             if (id != gameSystem.Id)
             {
                 return BadRequest();
-            }            
+            }
+            
             SetChildIds(gameSystem);
             var existing = await GetGameSystemAsync(gameSystem.Id);
             foreach (var role in existing.Roles)
@@ -80,9 +78,20 @@ namespace BlazorFormSample.Server.Controllers
 
             foreach (var skillGroup in existing.SkillGroups)
             {
-                if (gameSystem.SkillGroups.All(x => x.Id != skillGroup.Id))
+                var incomingGroup = gameSystem.SkillGroups.FirstOrDefault(x => x.Id == skillGroup.Id);
+                if (incomingGroup == null)
                 {
-                    _context.SkillGroups.Remove(skillGroup);
+                    RemoveSkillGroup(skillGroup);
+                }
+                else
+                {
+                    foreach (var skill in skillGroup.Skills)
+                    {
+                        if (incomingGroup.Skills.All(x => x.Id != skill.Id)) 
+                        {
+                            _context.Entry(skill).State = EntityState.Deleted;                            
+                        }
+                    }
                 }
             }
 
@@ -147,6 +156,7 @@ namespace BlazorFormSample.Server.Controllers
                 }
                 else
                 {
+                    
                     _context.Entry(role).State = EntityState.Modified;
                 }
             }
@@ -154,6 +164,20 @@ namespace BlazorFormSample.Server.Controllers
             foreach (var skillGroup in gameSystem.SkillGroups)
             {
                 SetIdIfNeeded(skillGroup);
+                
+                foreach(var skill in skillGroup.Skills)
+                {
+                    SetIdIfNeeded(skill);
+                    if (skill.SkillGroupId == default)
+                    {
+                        skill.SkillGroupId = skillGroup.Id;
+                        _context.Skills.Add(skill);
+                    }
+                    else
+                    {
+                        _context.Entry(skill).State = EntityState.Modified;
+                    }
+                }
                 if (skillGroup.GameSystemId == default)
                 {
                     skillGroup.GameSystemId = gameSystem.Id;
@@ -191,13 +215,23 @@ namespace BlazorFormSample.Server.Controllers
             }
             foreach (var skillGroup in gameSystem.SkillGroups)
             {
-                _context.SkillGroups.Remove(skillGroup);
+                RemoveSkillGroup(skillGroup);
             }
 
             _context.GameSystems.Remove(gameSystem);
             await _context.SaveChangesAsync();
 
             return gameSystem;
+        }
+
+        private void RemoveSkillGroup(SkillGroup skillGroup)
+        {
+            foreach (var skill in skillGroup.Skills)
+            {
+
+                _context.Entry(skill).State = EntityState.Deleted;
+            }
+            _context.Entry(skillGroup).State = EntityState.Deleted;
         }
 
         private bool GameSystemExists(Guid id)
@@ -209,7 +243,7 @@ namespace BlazorFormSample.Server.Controllers
         {
             return await _context.GameSystems.AsNoTracking()
                 .Include(x => x.Roles).AsNoTracking()
-                .Include(x => x.SkillGroups).AsNoTracking()
+                .Include(x => x.SkillGroups).ThenInclude(x => x.Skills)
                 .Include(x => x.Races).AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
         }

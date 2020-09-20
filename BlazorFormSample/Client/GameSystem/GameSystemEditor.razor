@@ -16,7 +16,7 @@
             <span class="oi oi-pencil"></span>
             <span>Edit</span>
         </button>
-        <button class="btn btn-primary mr-1" @onclick="SaveAsync" aria-label="Save" hidden="@(ReadOnly || !editContext.IsModified())" disabled="@(!editContext.IsModified())" tabindex="0">
+        <button class="btn btn-primary mr-1" @onclick="SaveAsync" aria-label="Save" hidden="@(ReadOnly || !HasChanges)" disabled="@(!HasChanges)" tabindex="0">
             <span class="oi oi-check"></span>
             <span>Save</span>
         </button>
@@ -62,7 +62,7 @@
                 <label class="col-1 align-middle form-label-sm" label-for="game_description">Description</label>
                 <InputTextArea class="form-control col-4 align-middle" id="game_description" @bind-Value="GameSystem.Description" @bind-disabled="ReadOnly"></InputTextArea>
             </div>
-            <div class="card-columns">
+            <div class="card-group">
                 <div class="card">
                     <div class="card-header">
                         <h4>Roles</h4>
@@ -129,14 +129,36 @@
                         <div class="container">
                             <div class="form-row">
                                 <span class="col-4">Name</span>
-                                <span class="col-1"></span>
+                                <span class="col-4"></span>
                             </div>
-                            @foreach (var item in GameSystem.SkillGroups)
+                            @foreach (var skillGroup in GameSystem.SkillGroups)
                             {
-                                <div class="form-row">
-                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
-                                    <span class="oi oi-trash col-1" aria-label="Remove Skill Group" @onclick="x => RemoveSkillGroup(item)" hidden="@(ReadOnly)"></span>
+                                <div class="row">
+                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="skillGroup.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <div class="col-2">
+                                        <button class="btn btn-primary btn-sm text-nowrap" aria-label="Add Skill to Skill GroupGroup" @onclick="x => AddSkill(skillGroup)" hidden="@(ReadOnly)" tabindex="0">
+                                            <span class="oi oi-plus"></span><span>Add Skill</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill Group" @onclick="x => RemoveSkillGroup(skillGroup)" hidden="@(ReadOnly)" tabindex="0">
+                                            <span class="oi oi-trash"></span><span>Remove</span>
+                                        </button>
+                                    </div>
                                 </div>
+                                @foreach (var skill in skillGroup.Skills)
+                                {
+                                    <div class="row">
+                                        <InputText class="form-control form-control-sm col-4 align-middle ml-2 mr-n2" @bind-Value="skill.Name" @bind-disabled="ReadOnly"></InputText>
+                                        <div class="col-2">
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill" @onclick="x => RemoveSkill(skillGroup, skill)" hidden="@(ReadOnly)" tabindex="0">
+                                                <span class="oi oi-trash"></span><span>Remove</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
@@ -154,21 +176,26 @@
     protected GameSystem GameSystem { get; set; }
 
     public bool ReadOnly { get; set; }
+
     private EditContext editContext;
 
     protected bool WasFromNew { get; set; }
 
     protected bool ConfirmDelete { get; set; } = false;
 
+    protected bool HasCollectionChanges { get; set; } = false;
+
+    protected bool HasChanges => HasCollectionChanges || editContext.IsModified();
+
     protected override async Task OnParametersSetAsync()
     {
-        ReadOnly = true;
         WasFromNew = new Uri(NavigationManager.Uri).Segments.Last() == "new";
         await InitializeEditorAsync();
     }
 
     private async Task InitializeEditorAsync()
     {
+        HasCollectionChanges = false;
         if (WasFromNew)
         {
             GameSystem = new GameSystem();
@@ -177,6 +204,7 @@
         else
         {
             await LoadGameSystem(new Guid(GameSystemId));
+            ReadOnly = true;
         }
         if (editContext != null)
         {
@@ -207,9 +235,13 @@
         GameSystem.SkillGroups.Add(new SkillGroup());
     }
 
+    private void AddSkill(SkillGroup group)
+    {
+        group.Skills.Add(new Skill());
+    }
+
     private async Task CancelAsync()
     {
-        ReadOnly = true;
         if (WasFromNew)
         {
             NavigationManager.NavigateTo("/game_system");
@@ -243,17 +275,22 @@
 
     private void RemoveRace(Race race)
     {
-        GameSystem.Races.Remove(race);
+        HasCollectionChanges = GameSystem.Races.Remove(race) || HasCollectionChanges;
     }
 
     private void RemoveRole(Role role)
     {
-        GameSystem.Roles.Remove(role);
+        HasCollectionChanges = GameSystem.Roles.Remove(role) || HasCollectionChanges;
     }
 
     private void RemoveSkillGroup(SkillGroup skillGroup)
     {
-        GameSystem.SkillGroups.Remove(skillGroup);
+        HasCollectionChanges = GameSystem.SkillGroups.Remove(skillGroup) || HasCollectionChanges;
+    }
+
+    private void RemoveSkill(SkillGroup skillGroup, Skill skill)
+    {
+        HasCollectionChanges = skillGroup.Skills.Remove(skill) || HasCollectionChanges;
     }
 
     private async Task SaveAsync()
@@ -272,7 +309,6 @@
 
         }
         await InitializeEditorAsync();
-        ReadOnly = true;
     }
 
     private void StartEdit()

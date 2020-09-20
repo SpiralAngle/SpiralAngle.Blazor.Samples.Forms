@@ -61,15 +61,15 @@ app {
         border-style: solid;
     }
 
-.btn-outline-danger {
-    color:white;
+.btn-danger {
+    color: white;
     background-color: #A31C00;
     border-color: #A31C00;
     border-width: 1px;
     border-style: solid;
 }
 
-    .btn-outline-danger:hover {
+    .btn-danger:hover {
         color: #FFD46E;
         background: #A31C00;
         border-color: #FFD46E;
@@ -77,16 +77,10 @@ app {
         border-style: solid;
     }
 
-.btn-secoondary {
-    color: #01212C;
-    background-color: #FFD46E;
-    border: none;
-}
-
 .top-row {
     height: 3.5rem;
     display: flex;
-    align-items: center;    
+    align-items: center;
 }
 
 .main {
@@ -185,6 +179,7 @@ app {
         color: #60B8D5;
         filter: brightness(200%);
     }
+
     .card-header h4 {
         color: #60B8D5;
         filter: brightness(200%);
@@ -192,6 +187,7 @@ app {
         margin-right: 1ch;
         vertical-align: middle;
     }
+
     .card-header .btn-toolbar {
         display: inline;
     }
@@ -205,11 +201,13 @@ app > .footer {
     app > .footer a, app > .footer a:visited, app > .footer a:link {
         color: #A31C00;
     }
+
         app > .footer a:hover {
             color: #A31C00;
             filter: brightness(150%);
         }
-.form-control:disabled, .form-control-sm:disabled, .form-control-lg:disabled{
+
+.form-control:disabled, .form-control-sm:disabled, .form-control-lg:disabled {
     border-color: white;
     background: none;
 }
@@ -236,7 +234,7 @@ app > .footer {
 }
 
 textarea.form-control {
-    line-height:1.3em;
+    line-height: 1.3em;
     height: 13em;
 }
 
