@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlazorFormSample.Server.Data;
 using BlazorFormSample.Shared;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorFormSample.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SkillsController : ControllerBase
