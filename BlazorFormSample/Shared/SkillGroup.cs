@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography;
 
 namespace BlazorFormSample.Shared
 {
@@ -19,5 +22,12 @@ namespace BlazorFormSample.Shared
 
         [Required]
         public Guid GameSystemId { get; set; }
+
+        public IList<Skill> Skills { get; set; }
+
+        public SkillGroup()
+        {
+            Skills = new List<Skill>();
+        }
     }
 }

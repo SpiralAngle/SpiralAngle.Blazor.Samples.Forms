@@ -67,7 +67,7 @@ namespace BlazorFormSample.Server.Data
             modelBuilder.Entity<Skill>(entity =>
             {
                 entity.HasOne(c => c.SkillGroup)
-                     .WithMany()
+                     .WithMany(c => c.Skills)
                      .HasForeignKey(c => c.SkillGroupId)
                      .OnDelete(DeleteBehavior.NoAction);
             });

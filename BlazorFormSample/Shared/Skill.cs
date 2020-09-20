@@ -13,8 +13,6 @@ namespace BlazorFormSample.Shared
         [Required]
         [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
-
-        [Required]
         public SkillGroup SkillGroup { get; set; }
 
         [Required]
