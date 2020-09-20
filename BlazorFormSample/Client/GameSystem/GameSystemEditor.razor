@@ -30,50 +30,63 @@
             </div>
             <div class="card-columns">
                 <div class="card">
-                    <div class="card-header">Roles</div>
+                    <div class="card-header">
+                        <span class="float-left">Roles</span>
+                        <span class="oi oi-plus float-right" aria-label="Add Role" @onclick="AddRole" hidden="@(ReadOnly)"></span>
+                    </div>
                     <div class="card-body">
                         <div class="container">
                             <div class="form-row">
                                 <span class="col-3">Name</span>
+                                <span class="col-1"></span>
                             </div>
                             @foreach (var item in GameSystem.Roles)
                             {
                                 <div class="form-row">
                                     <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <span class="oi oi-trash col-1" aria-label="Remove Role" @onclick="x => RemoveRole(item)" hidden="@(ReadOnly)"></span>
                                 </div>
                             }
                         </div>
                     </div>
-                    <div class="card-footer"><span class="oi oi-plus" aria-label="Add Role" @onclick="AddRole" hidden="@(ReadOnly)"></span></div>
                 </div>
                 <div class="card">
-                    <div class="card-header">Races</div>
+                    <div class="card-header">
+                        <span class="float-left">Races</span>
+                        <span class="oi oi-plus float-right" aria-label="Add Race" @onclick="AddRace" hidden="@(ReadOnly)"></span>
+                    </div>
                     <div class="card-body">
                         <div class="container">
                             <div class="form-row">
                                 <span class="col-3">Name</span>
+                                <span class="col-1"></span>
                             </div>
                             @foreach (var item in GameSystem.Races)
                             {
                                 <div class="form-row">
                                     <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <span class="oi oi-trash col-1" aria-label="Remove Race" @onclick="x => RemoveRace(item)" hidden="@(ReadOnly)"></span>
                                 </div>
                             }
                         </div>
                     </div>
-                    <div class="card-footer"><span class="oi oi-plus" aria-label="Add Race" @onclick="AddRace" hidden="@(ReadOnly)"></span></div>
                 </div>
                 <div class="card">
-                    <div class="card-header">Skill Groups</div>
+                    <div class="card-header">
+                        <span class="float-left">Skill Groups</span>
+                        <span class="oi oi-plus float-right" aria-label="Add Skill Group" @onclick="AddSkillGroup" hidden="@(ReadOnly)"></span>
+                    </div>
                     <div class="card-body">
                         <div class="container">
                             <div class="form-row">
                                 <span class="col-3">Name</span>
+                                <span class="col-1"></span>
                             </div>
                             @foreach (var item in GameSystem.SkillGroups)
                             {
                                 <div class="form-row">
                                     <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <span class="oi oi-trash col-1" aria-label="Remove Skill Group" @onclick="x => RemoveSkillGroup(item)" hidden="@(ReadOnly)"></span>
                                 </div>
                             }
                         </div>
@@ -93,8 +106,8 @@
     </CascadingValue>
 </LoadingIndicator>
 @code {
-        [Parameter]
-        public string GameSystemId { get; set; }
+    [Parameter]
+    public string GameSystemId { get; set; }
 
     protected GameSystem GameSystem { get; set; }
 
@@ -162,13 +175,30 @@
             await InitializeEditorAsync();
         }
     }
+
     private async Task DeleteAsync()
     {
         if (!WasFromNew)
-        { await GameSystemService.DeleteItemAsync(GameSystem);
+        {
+            await GameSystemService.DeleteItemAsync(GameSystem);
 
             NavigationManager.NavigateTo("/game_system");
         }
+    }
+
+    private void RemoveRace(Race race)
+    {
+        GameSystem.Races.Remove(race);
+    }
+
+    private void RemoveRole(Role role)
+    {
+        GameSystem.Roles.Remove(role);
+    }
+
+    private void RemoveSkillGroup(SkillGroup skillGroup)
+    {
+        GameSystem.SkillGroups.Remove(skillGroup);
     }
 
     private async Task SaveAsync()

@@ -38,7 +38,7 @@ namespace BlazorFormSample.Server.Controllers
             var gameSystem = await _context.GameSystems
                 .Include(x => x.Roles)
                 .Include(x => x.SkillGroups)
-                .Include(x => x.Races)                
+                .Include(x => x.Races)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (gameSystem == null)
@@ -58,8 +58,32 @@ namespace BlazorFormSample.Server.Controllers
             if (id != gameSystem.Id)
             {
                 return BadRequest();
-            }
+            }            
             SetChildIds(gameSystem);
+            var existing = await GetGameSystemAsync(gameSystem.Id);
+            foreach (var role in existing.Roles)
+            { 
+                if (gameSystem.Roles.All(x => x.Id != role.Id))
+                {
+                    _context.Roles.Remove(role);
+                }
+            }
+            foreach (var race in existing.Races)
+            {
+                if (gameSystem.Races.All(x => x.Id != race.Id))
+                {
+                    _context.Races.Remove(race);
+                }
+            }
+
+            foreach (var skillGroup in existing.SkillGroups)
+            {
+                if (gameSystem.SkillGroups.All(x => x.Id != skillGroup.Id))
+                {
+                    _context.SkillGroups.Remove(skillGroup);
+                }
+            }
+
             _context.Entry(gameSystem).State = EntityState.Modified;
 
             try
@@ -149,10 +173,23 @@ namespace BlazorFormSample.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<GameSystem>> DeleteGameSystem(Guid id)
         {
-            var gameSystem = await _context.GameSystems.FindAsync(id);
+            var gameSystem = await GetGameSystemAsync(id);
             if (gameSystem == null)
             {
                 return NotFound();
+            }
+
+            foreach(var role in gameSystem.Roles)
+            {
+                _context.Roles.Remove(role);
+            }
+            foreach (var race in gameSystem.Races)
+            {
+                _context.Races.Remove(race);
+            }
+            foreach (var skillGroup in gameSystem.SkillGroups)
+            {
+                _context.SkillGroups.Remove(skillGroup);
             }
 
             _context.GameSystems.Remove(gameSystem);
@@ -164,6 +201,15 @@ namespace BlazorFormSample.Server.Controllers
         private bool GameSystemExists(Guid id)
         {
             return _context.GameSystems.Any(e => e.Id == id);
+        }
+
+        private async Task<GameSystem> GetGameSystemAsync(Guid id)
+        {
+            return await _context.GameSystems.AsNoTracking()
+                .Include(x => x.Roles).AsNoTracking()
+                .Include(x => x.SkillGroups).AsNoTracking()
+                .Include(x => x.Races).AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }
