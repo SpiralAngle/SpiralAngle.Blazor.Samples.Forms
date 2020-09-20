@@ -9,7 +9,39 @@
 @page "/game_system/{GameSystemId}"
 @page "/game_system/new"
 <LoadingIndicator Entity="GameSystem">
-    <span class="oi oi-trash small" @onclick="DeleteAsync" aria-label="Delete" hidden="@WasFromNew" tabindex="0"></span>
+    <div class="btn-toolbar" role="toolbar">        
+            <button class="btn btn-primary" @onclick="StartEdit" aria-label="Start Editing" hidden="@(!ReadOnly)" disabled="@(!ReadOnly)" tabindex="0">
+                <span class="oi oi-pencil"></span>
+                <span>Edit</span>
+            </button>        
+            <button class="btn btn-primary mr-1" @onclick="SaveAsync" aria-label="Save" hidden="@(ReadOnly || !editContext.IsModified())" disabled="@(!editContext.IsModified())" tabindex="0">
+                <span class="oi oi-check"></span>
+                <span>Save</span>
+            </button>
+            <button class="btn btn-secondary" @onclick="CancelAsync" aria-label="Cancel" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                <span class="oi oi-ban"></span>
+                <span>Cancel</span>
+            </button>
+        <div class="btn-group ml-4" role="group">
+            <button class="btn btn-outline-danger" @onclick="Delete" aria-label="Delete" hidden="@HideDelete" disabled="@HideDelete" tabindex="0">
+                <span class="oi oi-trash"></span>
+                <span>Delete</span>
+            </button>
+        </div>
+        <div class="btn-group ml-4" role="group">
+            <button class="btn btn-danger" @onclick="CancelDelete" aria-label="Cancel Delete" hidden="@HideConfirmDelete" disabled="@HideConfirmDelete" tabindex="0">
+                <span class="oi oi-bell"></span>
+                <span>Cancel Delete</span>
+                <span class="oi oi-ban"></span>
+            </button>
+            <button class="btn btn-outline-danger" @onclick="DeleteConfirmedAsync" aria-label="Confirm Delete" hidden="@HideConfirmDelete" disabled="@HideConfirmDelete" tabindex="0">
+                <span class="oi oi-trash"></span>
+                <span>Yes, Delete</span>
+                <span class="oi oi-trash"></span>
+            </button>
+        </div>
+    </div>
+
     <CascadingValue Value="ReadOnly">
         <EditForm EditContext="@editContext">
             <div class="form-row">
@@ -26,24 +58,29 @@
             </div>
             <div class="form-row">
                 <label class="col-1 align-middle form-label-sm" label-for="game_description">Description</label>
-                <InputTextArea class="form-control col-2 align-middle" id="game_description" @bind-Value="GameSystem.Description" @bind-disabled="ReadOnly"></InputTextArea>
+                <InputTextArea class="form-control col-4 align-middle" id="game_description" @bind-Value="GameSystem.Description" @bind-disabled="ReadOnly"></InputTextArea>
             </div>
             <div class="card-columns">
                 <div class="card">
                     <div class="card-header">
-                        <span class="float-left">Roles</span>
-                        <span class="oi oi-plus float-right" aria-label="Add Role" @onclick="AddRole" hidden="@(ReadOnly)"></span>
+                        <h4>Roles</h4>
+                        <div class="btn-toolbar btn-group-sm" role="toolbar">
+                            <button class="btn btn-primary" @onclick="AddRole" aria-label="Add Role" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                                <span class="oi oi-plus"></span>
+                                <span>Add</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="container">
                             <div class="form-row">
-                                <span class="col-3">Name</span>
+                                <span class="col-4">Name</span>
                                 <span class="col-1"></span>
                             </div>
                             @foreach (var item in GameSystem.Roles)
                             {
                                 <div class="form-row">
-                                    <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
                                     <span class="oi oi-trash col-1" aria-label="Remove Role" @onclick="x => RemoveRole(item)" hidden="@(ReadOnly)"></span>
                                 </div>
                             }
@@ -52,19 +89,24 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <span class="float-left">Races</span>
-                        <span class="oi oi-plus float-right" aria-label="Add Race" @onclick="AddRace" hidden="@(ReadOnly)"></span>
+                        <h4>Races</h4>
+                        <div class="btn-toolbar btn-group-sm" role="toolbar">
+                            <button class="btn btn-primary" @onclick="AddRace" aria-label="Add Race" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                                <span class="oi oi-plus"></span>
+                                <span>Add</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="container">
                             <div class="form-row">
-                                <span class="col-3">Name</span>
+                                <span class="col-4">Name</span>
                                 <span class="col-1"></span>
                             </div>
                             @foreach (var item in GameSystem.Races)
                             {
                                 <div class="form-row">
-                                    <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
                                     <span class="oi oi-trash col-1" aria-label="Remove Race" @onclick="x => RemoveRace(item)" hidden="@(ReadOnly)"></span>
                                 </div>
                             }
@@ -73,35 +115,33 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <span class="float-left">Skill Groups</span>
-                        <span class="oi oi-plus float-right" aria-label="Add Skill Group" @onclick="AddSkillGroup" hidden="@(ReadOnly)"></span>
+                        <h4>Skill Groups</h4>
+                        <div class="btn-toolbar btn-group-sm" role="toolbar">
+                            <button class="btn btn-primary" @onclick="AddSkillGroup" aria-label="Add Skill Group" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                                <span class="oi oi-plus"></span>
+                                <span>Add</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="container">
                             <div class="form-row">
-                                <span class="col-3">Name</span>
+                                <span class="col-4">Name</span>
                                 <span class="col-1"></span>
                             </div>
                             @foreach (var item in GameSystem.SkillGroups)
                             {
                                 <div class="form-row">
-                                    <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
                                     <span class="oi oi-trash col-1" aria-label="Remove Skill Group" @onclick="x => RemoveSkillGroup(item)" hidden="@(ReadOnly)"></span>
                                 </div>
                             }
                         </div>
                     </div>
-                    <div class="card-footer"><span class="oi oi-plus" aria-label="Add Skill Group" @onclick="AddSkillGroup" hidden="@(ReadOnly)"></span></div>
                 </div>
             </div>
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <div>@ReadOnly</div>
-            <div class="col">
-                <span class="oi oi-pencil small" @onclick="StartEdit" aria-label="Start Editing" hidden="@(!ReadOnly)" tabindex="0"></span>
-                <span class="oi oi-check small" @onclick="SaveAsync" aria-label="Save" hidden="@(ReadOnly)" tabindex="0"></span>
-                <span class="oi oi-x small" @onclick="CancelAsync" aria-label="Cancel" hidden="@(ReadOnly)" tabindex="0"></span>
-            </div>
         </EditForm>
     </CascadingValue>
 </LoadingIndicator>
@@ -113,9 +153,10 @@
 
     public bool ReadOnly { get; set; }
     private EditContext editContext;
-    private string lastChange;
 
     protected bool WasFromNew { get; set; }
+
+    protected bool ConfirmDelete { get; set; } = false;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -166,6 +207,7 @@
 
     private async Task CancelAsync()
     {
+        ReadOnly = true;
         if (WasFromNew)
         {
             NavigationManager.NavigateTo("/game_system");
@@ -176,14 +218,25 @@
         }
     }
 
-    private async Task DeleteAsync()
+    private void CancelDelete()
     {
-        if (!WasFromNew)
+        ConfirmDelete = false;
+    }
+
+    private void Delete()
+    {
+        ConfirmDelete = true;
+    }
+
+    private async Task DeleteConfirmedAsync()
+    {
+        if (!WasFromNew && ConfirmDelete)
         {
             await GameSystemService.DeleteItemAsync(GameSystem);
 
             NavigationManager.NavigateTo("/game_system");
         }
+        ConfirmDelete = false;
     }
 
     private void RemoveRace(Race race)
@@ -225,11 +278,30 @@
         ReadOnly = false;
     }
 
+    private bool HideConfirmDelete
+    {
+        get
+        {
+            if (WasFromNew)
+                return true;
+            return !ConfirmDelete;
+        }
+    }
+
+
+    private bool HideDelete
+    {
+        get
+        {
+            return WasFromNew || ConfirmDelete;
+        }
+    }
+
+
 
     private void FieldChanged(object sender, FieldChangedEventArgs e)
     {
-        // just a sample of edit context play a little at being a view model.
-        lastChange = $"{e.FieldIdentifier.FieldName}:{e.FieldIdentifier.GetValue()}";
+        ConfirmDelete = false;
     }
 
     public void Dispose()

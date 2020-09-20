@@ -2,57 +2,60 @@
 @using SpiralAngle.Blazor.Extensions.Forms
 @inject IService<GameSystem> GameSystemService
 @page "/game_system"
-<h3>Game System List</h3>
-<LoadingIndicator Entity="GameSystems">
-    <div class="float-right"><NavLink class="nav-link" href="/game_system/new" Match="NavLinkMatch.Prefix"><span class="oi oi-plus"></span>&nbsp;Add</NavLink></div>
-    <div class="card-group">
-        @foreach (var game in GameSystems)
+    <h3><NavLink href="#" Match="NavLinkMatch.Prefix">Game System List</NavLink></h3>
+    <LoadingIndicator Entity="GameSystems">
+
+        <div class="btn-toolbar" role="toolbar">
+            <NavLink class="btn btn-primary" href="/game_system/new" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Add Game System"><span class="oi oi-plus"></span>&nbsp;Add</NavLink>
+        </div>
+        <div class="card-group">
+            @foreach (var game in GameSystems)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <NavLink class="nav-link" href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Go to Game System">@game.Name</NavLink>
+                    </div>
+                    <div class="card-body">
+                        <div class="game-description-truncated">@game.Description</div>
+                    </div>
+                    <div class="card-footer">
+                        <NavLink class="nav-link" href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Go to Game System"><span class="oi oi-magnifying-glass"></span>&nbsp;Details</NavLink>
+                    </div>
+                </div>
+            }
+        </div>
+    </LoadingIndicator>
+
+    @code {
+
+        private IEnumerable<GameSystem> GameSystems;
+        private GameSystem entryItem = new GameSystem();
+
+        protected override async Task OnInitializedAsync()
         {
-            <div class="card">
-                <div class="card-header">
-                    <NavLink class="nav-link" href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix">@game.Name</NavLink>
-                </div>
-                <div class="card-body">
-                    <div class="game-description-truncated">@game.Description</div>
-                </div>
-                <div class="card-footer">
-                    <NavLink class="nav-link" href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix"><span class="oi oi-magnifying-glass"></span>&nbsp;Details</NavLink>
-                </div>
-            </div>
+            await LoadItems();
         }
-    </div>
-</LoadingIndicator>
 
-@code {    
+        private async Task LoadItems()
+        {
+            GameSystems = await GameSystemService.GetListAsync();
+        }
 
-    private IEnumerable<GameSystem> GameSystems;
-    private GameSystem entryItem = new GameSystem();
+        protected async Task SaveItem()
+        {
+            var response = await GameSystemService.AddItemAsync(entryItem);
+            entryItem = new GameSystem();
+            await LoadItems();
+        }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadItems();
+        protected async Task CancelItem()
+        {
+            entryItem = new GameSystem();
+            await LoadItems();
+        }
+
+        private string GetGameSystemLink(GameSystem game)
+        {
+            return $"game_system/{game.Id}";
+        }
     }
-
-    private async Task LoadItems()
-    {
-        GameSystems = await GameSystemService.GetListAsync();
-    }
-
-    protected async Task SaveItem()
-    {
-        var response = await GameSystemService.AddItemAsync(entryItem);
-        entryItem = new GameSystem();
-        await LoadItems();
-    }
-
-    protected async Task CancelItem()
-    {
-        entryItem = new GameSystem();
-        await LoadItems();
-    }
-
-    private string GetGameSystemLink(GameSystem game)
-    {
-        return $"game_system/{game.Id}";
-    }
-}
