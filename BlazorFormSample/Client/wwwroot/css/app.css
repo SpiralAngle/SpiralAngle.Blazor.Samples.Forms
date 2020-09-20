@@ -8,16 +8,79 @@ a, .btn-link {
     color: #0366d6;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
 app {
     position: relative;
     display: flex;
     flex-direction: column;
+}
+
+.btn-primary {
+    color: #01212C;
+    background-color: #60B8D5;
+    border: none;
+}
+
+    .btn-primary:hover {
+        color: #60B8D5;
+        background-color: #01212C;
+        border: none;
+    }
+
+    .btn-primary:disabled {
+        color: #01212C;
+        background-color: #60B8D5;
+        border: none;
+        filter: brightness(150%);
+    }
+
+.btn-secondary {
+    color: #01212C;
+    background-color: #FFD46E;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        color: white;
+        background-color: #463100;
+        border: none;
+    }
+
+.btn-outline-danger {
+    color: #A31C00;
+    background: none;
+    border-color: #A31C00;
+    border-width: 1px;
+    border-style: solid;
+}
+
+    .btn-outline-danger:hover {
+        color: white;
+        background: #A31C00;
+        border-color: #A31C00;
+        border-width: 1px;
+        border-style: solid;
+    }
+
+.btn-outline-danger {
+    color:white;
+    background-color: #A31C00;
+    border-color: #A31C00;
+    border-width: 1px;
+    border-style: solid;
+}
+
+    .btn-outline-danger:hover {
+        color: #FFD46E;
+        background: #A31C00;
+        border-color: #FFD46E;
+        border-width: 1px;
+        border-style: solid;
+    }
+
+.btn-secoondary {
+    color: #01212C;
+    background-color: #FFD46E;
+    border: none;
 }
 
 .top-row {
@@ -31,14 +94,15 @@ app {
 }
 
     .main .top-row {
-        background-color: #f7f7f7;
-        border-bottom: 1px solid #d6d5d5;
+        background-color: #01212C;
+        border-bottom: 1px solid #01212C;
         justify-content: flex-end;
     }
 
         .main .top-row > a, .main .top-row .btn-link {
             white-space: nowrap;
             margin-left: 1.5rem;
+            color: #60B8D5
         }
 
         .main .top-row a:first-child {
@@ -52,11 +116,12 @@ app {
     }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-image: linear-gradient(180deg, #01212C 0%, #60B8D5 70%);
 }
 
     .sidebar .top-row {
-        background-color: rgba(0,0,0,0.4);
+        background-color: #01212C;
+        /*opacity: 0.7;*/
     }
 
     .sidebar .navbar-brand {
@@ -106,6 +171,53 @@ app {
     padding-top: 1.1rem;
 }
 
+    .content a {
+        color: #01212C;
+    }
+
+.card-header, .card-footer {
+    background-color: #034D66;
+    color: white;
+}
+
+    .card-header a, .card-footer a {
+        color: #60B8D5;
+        filter: brightness(200%);
+    }
+    .card-header h4 {
+        color: #60B8D5;
+        filter: brightness(200%);
+        display: inline;
+        margin-right: 1ch;
+        vertical-align: middle;
+    }
+    .card-header .btn-toolbar {
+        display: inline;
+    }
+
+app > .footer {
+    text-align: right;
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+    app > .footer a, app > .footer a:visited, app > .footer a:link {
+        color: #A31C00;
+    }
+        app > .footer a:hover {
+            color: #A31C00;
+            filter: brightness(150%);
+        }
+.form-control:disabled, .form-control-sm:disabled, .form-control-lg:disabled{
+    border-color: white;
+    background: none;
+}
+
+.game-description-truncated {
+    max-height: 20ex;
+    overflow: hidden;
+}
+
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -120,6 +232,11 @@ app {
 
 .validation-message {
     color: red;
+}
+
+textarea.form-control {
+    line-height:1.3em;
+    height: 13em;
 }
 
 #blazor-error-ui {

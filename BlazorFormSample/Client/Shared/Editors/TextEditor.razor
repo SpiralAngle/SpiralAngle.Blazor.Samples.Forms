@@ -1,0 +1,42 @@
+﻿@namespace BlazorFormSample.Client.Shared.Editors
+<label class="@LabelClass" label-for="@ControlId">@Label</label>
+<InputText class="@InputClass" id="@ControlId" @bind-Value="Value" @bind-disabled="ReadOnly"></InputText>
+
+@code {
+    [CascadingParameter]
+    public bool ReadOnly { get; set; }
+
+    [Parameter]
+    public string Value { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string ControlId { get; set; }
+
+    [Parameter]
+    public int InputWidth { get; set; } = 2;
+
+    [Parameter]
+    public int LabelWidth { get; set; } = 1;
+
+    [Parameter]
+    public EventCallback<string> OnChange { get; set; }
+
+    private string LabelClass
+    {
+        get
+        {
+            return $"col-{LabelWidth} align-middle form-label-sm";
+        }
+    }
+
+    private string InputClass
+    {
+        get
+        {
+            return $"form-control col-{InputWidth} align-middle";
+        }
+    }
+}

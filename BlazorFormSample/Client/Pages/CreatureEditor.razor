@@ -11,9 +11,9 @@
         </div>
         <div class="form-row">
             <label class="col-1 align-middle form-label-sm" label-for="race">Race</label>
-            <InputText class="form-control-sm col-2 align-middle" id="race" @bind-Value="Creature.Race" @bind-disabled="ReadOnly"></InputText>
-            <label class="col-1 align-middle col-form-label-sm  form-label-sm" label-for="class">Class</label>
-            <InputText class="form-control-sm col-2 align-middle" id="class" @bind-Value="Creature.Class" @bind-disabled="ReadOnly"></InputText>
+            <InputText class="form-control-sm col-2 align-middle" id="race" @bind-Value="Creature.Race.Name" @bind-disabled="ReadOnly"></InputText>
+            <label class="col-1 align-middle col-form-label-sm  form-label-sm" label-for="archtype">Archtype</label>
+            <InputText class="form-control-sm col-2 align-middle" id="archtype" @bind-Value="Creature.Role.Name" @bind-disabled="ReadOnly"></InputText>
         </div>
 
         <fieldset>
@@ -94,7 +94,7 @@ else
     protected override void OnInitialized()
     {
         ReadOnly = true;
-        Creature = new Creature { Id = Guid.NewGuid() };
+        Creature = new Creature { Id = Guid.NewGuid(), Race = new Race(), Role = new Role() };
         editContext = new EditContext(Creature);
         editContext.OnFieldChanged += FieldChanged;
         base.OnInitialized();
@@ -113,6 +113,7 @@ else
 
     private void FieldChanged(object sender, FieldChangedEventArgs e)
     {
+        // just a sample of edit context play a little at being a view model.
         lastChange = $"{e.FieldIdentifier.FieldName}:{e.FieldIdentifier.GetValue()}";
     }
 

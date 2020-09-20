@@ -6,10 +6,15 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <NavLink class="ml-md-auto" href="about">
+            About
+        </NavLink>
     </div>
 
     <div class="content px-4">
         @Body
     </div>
+</div>
+<div class="fixed-bottom footer">
+    A <a href="http://www.spiralangle.com/" target="_blank">Spiral Angle</a> project. Licensed under the <NavLink href="terms-and-conditions">MIT License.</NavLink>
 </div>

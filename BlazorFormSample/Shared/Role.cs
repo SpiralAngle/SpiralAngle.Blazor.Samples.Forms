@@ -4,20 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorFormSample.Shared
 {
-    public class Skill : IEntity
+    public class Role : IEntity
     {
         [Key]
-        [Column("SkillId")]
+        [Column("RoleId")]
         public Guid Id { get; set; }
 
         [Required]
         [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
 
-        [Required]
-        public SkillGroup SkillGroup { get; set; }
+        public GameSystem GameSystem { get; set; }
 
         [Required]
-        public Guid SkillGroupId { get; set; }
+        public Guid GameSystemId { get; set; }
     }
 }

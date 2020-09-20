@@ -8,6 +8,11 @@ This is a sample project whose purpose is to show off both Blazor EditForms in a
 - Add Configuration
 - Add bunches of screens!
 - Add print media so you can print a creature.
+- Extract Toolbar into its own component and add notification events when it is invoking httpclient so you can do things like disabling edit while saving.
+- Add skills to skill group in GameSystem editor screen.
+- Add more info to GameSystem list.
+- Add attributes to replace fixed 6 attributes on creature.
+- Build out creature screen.
 
 ## Working with git Submodules
 
