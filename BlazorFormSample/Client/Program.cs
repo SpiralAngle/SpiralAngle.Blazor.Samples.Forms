@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using BlazorFormSample.Client.GameSystem;
 using BlazorFormSample.Client.Shared;
 using Models = BlazorFormSample.Shared;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+
 
 namespace BlazorFormSample.Client
 {
@@ -18,10 +20,38 @@ namespace BlazorFormSample.Client
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("app");            
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            await GetConfigurationFromServer(builder);
+
+            var scope = builder.Configuration["ScopeUri"];
+
+            builder.RootComponents.Add<App>("app");
+
+            builder.Services.AddHttpClient("SpiralAngle.BlazorFormSample.Server", client =>
+                client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("SpiralAngle.BlazorFormSample.Server"));
+
+            builder.Services.AddMsalAuthentication(options =>
+            {
+                builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
+                options.ProviderOptions.DefaultAccessTokenScopes.Add(scope);
+            });
+
             builder.Services.AddScoped<IService<Models.GameSystem>, GameSystemService>();
             await builder.Build().RunAsync();
+        }
+
+        private static async Task GetConfigurationFromServer(WebAssemblyHostBuilder builder)
+        {
+            var client = new HttpClient()
+            {
+                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+            };
+            using var response = await client.GetAsync("configuration");
+            using var stream = await response.Content.ReadAsStreamAsync();
+            builder.Configuration.AddJsonStream(stream);
         }
     }
 }

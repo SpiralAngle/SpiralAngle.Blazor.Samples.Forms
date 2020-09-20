@@ -10,9 +10,11 @@ using BlazorFormSample.Shared;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorFormSample.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GameSystemsController : ControllerBase

@@ -86,7 +86,7 @@ app {
 .top-row {
     height: 3.5rem;
     display: flex;
-    align-items: center;
+    align-items: center;    
 }
 
 .main {
@@ -97,12 +97,13 @@ app {
         background-color: #01212C;
         border-bottom: 1px solid #01212C;
         justify-content: flex-end;
+        color: #60B8D5;
     }
 
         .main .top-row > a, .main .top-row .btn-link {
             white-space: nowrap;
             margin-left: 1.5rem;
-            color: #60B8D5
+            color: #60B8D5;
         }
 
         .main .top-row a:first-child {

@@ -1,5 +1,7 @@
 ﻿@using BlazorFormSample.Shared
 @using SpiralAngle.Blazor.Extensions.Forms
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @page "/creature"
 @implements System.IDisposable
 @if (Creature != null)
@@ -42,7 +44,7 @@
                 <InputNumber class="form-control col-2 align-middle" id="charisma" @bind-Value="Creature.Charisma" @bind-disabled="ReadOnly"></InputNumber>
             </div>
         </fieldset>
- 
+
         <div class="card-columns">
             <div class="card">
                 <label class="align-middle form-label" label-for="Description">Description</label>
