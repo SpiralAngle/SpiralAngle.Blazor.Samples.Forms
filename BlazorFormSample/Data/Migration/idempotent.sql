@@ -9,7 +9,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE TABLE [GameSystems] (
         [GameSystemId] uniqueidentifier NOT NULL,
@@ -23,7 +23,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE TABLE [Items] (
         [ItemId] uniqueidentifier NOT NULL,
@@ -37,37 +37,37 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
-    CREATE TABLE [Race] (
+    CREATE TABLE [Races] (
         [RaceId] uniqueidentifier NOT NULL,
         [Name] nvarchar(max) NOT NULL,
         [GameSystemId] uniqueidentifier NOT NULL,
         [GameSystemId1] uniqueidentifier NULL,
-        CONSTRAINT [PK_Race] PRIMARY KEY ([RaceId]),
-        CONSTRAINT [FK_Race_GameSystems_GameSystemId] FOREIGN KEY ([GameSystemId]) REFERENCES [GameSystems] ([GameSystemId]),
-        CONSTRAINT [FK_Race_GameSystems_GameSystemId1] FOREIGN KEY ([GameSystemId1]) REFERENCES [GameSystems] ([GameSystemId]) ON DELETE NO ACTION
+        CONSTRAINT [PK_Races] PRIMARY KEY ([RaceId]),
+        CONSTRAINT [FK_Races_GameSystems_GameSystemId] FOREIGN KEY ([GameSystemId]) REFERENCES [GameSystems] ([GameSystemId]),
+        CONSTRAINT [FK_Races_GameSystems_GameSystemId1] FOREIGN KEY ([GameSystemId1]) REFERENCES [GameSystems] ([GameSystemId]) ON DELETE NO ACTION
     );
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
-    CREATE TABLE [Role] (
+    CREATE TABLE [Roles] (
         [RoleId] uniqueidentifier NOT NULL,
         [Name] nvarchar(max) NOT NULL,
         [GameSystemId] uniqueidentifier NOT NULL,
         [GameSystemId1] uniqueidentifier NULL,
-        CONSTRAINT [PK_Role] PRIMARY KEY ([RoleId]),
-        CONSTRAINT [FK_Role_GameSystems_GameSystemId] FOREIGN KEY ([GameSystemId]) REFERENCES [GameSystems] ([GameSystemId]),
-        CONSTRAINT [FK_Role_GameSystems_GameSystemId1] FOREIGN KEY ([GameSystemId1]) REFERENCES [GameSystems] ([GameSystemId]) ON DELETE NO ACTION
+        CONSTRAINT [PK_Roles] PRIMARY KEY ([RoleId]),
+        CONSTRAINT [FK_Roles_GameSystems_GameSystemId] FOREIGN KEY ([GameSystemId]) REFERENCES [GameSystems] ([GameSystemId]),
+        CONSTRAINT [FK_Roles_GameSystems_GameSystemId1] FOREIGN KEY ([GameSystemId1]) REFERENCES [GameSystems] ([GameSystemId]) ON DELETE NO ACTION
     );
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE TABLE [SkillGroups] (
         [SkillGroupId] uniqueidentifier NOT NULL,
@@ -80,7 +80,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE TABLE [Creatures] (
         [CreatureId] uniqueidentifier NOT NULL,
@@ -97,14 +97,14 @@ BEGIN
         [Description] nvarchar(max) NULL,
         CONSTRAINT [PK_Creatures] PRIMARY KEY ([CreatureId]),
         CONSTRAINT [FK_Creatures_GameSystems_GameSystemId] FOREIGN KEY ([GameSystemId]) REFERENCES [GameSystems] ([GameSystemId]),
-        CONSTRAINT [FK_Creatures_Race_RaceId] FOREIGN KEY ([RaceId]) REFERENCES [Race] ([RaceId]),
-        CONSTRAINT [FK_Creatures_Role_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Role] ([RoleId])
+        CONSTRAINT [FK_Creatures_Races_RaceId] FOREIGN KEY ([RaceId]) REFERENCES [Races] ([RaceId]),
+        CONSTRAINT [FK_Creatures_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([RoleId])
     );
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE TABLE [Skills] (
         [SkillId] uniqueidentifier NOT NULL,
@@ -117,7 +117,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE TABLE [InventoryItems] (
         [ItemInventoryId] uniqueidentifier NOT NULL,
@@ -136,7 +136,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE TABLE [CreatureSkills] (
         [CreatureSkillId] uniqueidentifier NOT NULL,
@@ -151,122 +151,122 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_Creatures_GameSystemId] ON [Creatures] ([GameSystemId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_Creatures_RaceId] ON [Creatures] ([RaceId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_Creatures_RoleId] ON [Creatures] ([RoleId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_CreatureSkills_CreatureId] ON [CreatureSkills] ([CreatureId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_CreatureSkills_SkillId] ON [CreatureSkills] ([SkillId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_InventoryItems_CreatureId] ON [InventoryItems] ([CreatureId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_InventoryItems_CreatureId1] ON [InventoryItems] ([CreatureId1]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_InventoryItems_ItemId] ON [InventoryItems] ([ItemId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_InventoryItems_ItemId1] ON [InventoryItems] ([ItemId1]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_Items_GameSystemId] ON [Items] ([GameSystemId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
-    CREATE INDEX [IX_Race_GameSystemId] ON [Race] ([GameSystemId]);
+    CREATE INDEX [IX_Races_GameSystemId] ON [Races] ([GameSystemId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
-    CREATE INDEX [IX_Race_GameSystemId1] ON [Race] ([GameSystemId1]);
+    CREATE INDEX [IX_Races_GameSystemId1] ON [Races] ([GameSystemId1]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
-    CREATE INDEX [IX_Role_GameSystemId] ON [Role] ([GameSystemId]);
+    CREATE INDEX [IX_Roles_GameSystemId] ON [Roles] ([GameSystemId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
-    CREATE INDEX [IX_Role_GameSystemId1] ON [Role] ([GameSystemId1]);
+    CREATE INDEX [IX_Roles_GameSystemId1] ON [Roles] ([GameSystemId1]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_SkillGroups_GameSystemId] ON [SkillGroups] ([GameSystemId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     CREATE INDEX [IX_Skills_SkillGroupId] ON [Skills] ([SkillGroupId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200919191959_InitialCreate')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200920034320_InitialCreate')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20200919191959_InitialCreate', N'3.1.8');
+    VALUES (N'20200920034320_InitialCreate', N'3.1.8');
 END;
 
 GO
