@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorFormSample.Shared
 {
-    public class Creature
+    public class Creature : IEntity
     {
         [Key]
         [Column("CreatureId")]
@@ -15,16 +15,21 @@ namespace BlazorFormSample.Shared
         [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
 
-        [Required]
         public GameSystem GameSystem { get; set; }
 
         [Required]
-        [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
-        public string Race { get; set; }
+        
+        public Guid GameSystemId { get; set; }
+
+        public Race Race { get; set; }
 
         [Required]
-        [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
-        public string Class { get; set; }
+        public Guid RaceId { get; set; }
+       
+        public Role Role { get; set; }
+
+        [Required]
+        public Guid RoleId { get; set; }
 
         [Required]
         [Range(0, 100)]

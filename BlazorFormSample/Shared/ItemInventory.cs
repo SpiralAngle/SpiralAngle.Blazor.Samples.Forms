@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorFormSample.Shared
 {
-    public class ItemInventory
+    public class ItemInventory : IEntity
     {
         [Key]
         [Column("ItemInventoryId")]
@@ -12,6 +12,9 @@ namespace BlazorFormSample.Shared
 
         [Required]
         public Item Item { get; set; }
+
+        [Required]
+        public Guid ItemId { get; set; }
 
         [Required]
         [Range(0, double.MaxValue)]        

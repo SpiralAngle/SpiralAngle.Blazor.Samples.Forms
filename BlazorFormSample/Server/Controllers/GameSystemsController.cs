@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlazorFormSample.Server.Data;
 using BlazorFormSample.Shared;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BlazorFormSample.Server.Controllers
 {
@@ -32,7 +35,11 @@ namespace BlazorFormSample.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GameSystem>> GetGameSystem(Guid id)
         {
-            var gameSystem = await _context.GameSystems.FindAsync(id);
+            var gameSystem = await _context.GameSystems
+                .Include(x => x.Roles)
+                .Include(x => x.SkillGroups)
+                .Include(x => x.Races)                
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (gameSystem == null)
             {
@@ -52,7 +59,7 @@ namespace BlazorFormSample.Server.Controllers
             {
                 return BadRequest();
             }
-
+            SetChildIds(gameSystem);
             _context.Entry(gameSystem).State = EntityState.Modified;
 
             try
@@ -80,10 +87,62 @@ namespace BlazorFormSample.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<GameSystem>> PostGameSystem(GameSystem gameSystem)
         {
+            SetIdIfNeeded(gameSystem);
+            SetChildIds(gameSystem);
             _context.GameSystems.Add(gameSystem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGameSystem", new { id = gameSystem.Id }, gameSystem);
+        }
+
+        private void SetChildIds(GameSystem gameSystem)
+        {
+            foreach (var race in gameSystem.Races)
+            {
+                SetIdIfNeeded(race);
+                if (race.GameSystemId == default)
+                {
+                    race.GameSystemId = gameSystem.Id;
+                    _context.Races.Add(race);
+                }
+                else
+                {
+                    _context.Entry(race).State = EntityState.Modified;
+                }
+            }
+
+            foreach (var role in gameSystem.Roles)
+            {
+                SetIdIfNeeded(role);
+                if (role.GameSystemId == default)
+                {
+                    role.GameSystemId = gameSystem.Id;
+                    _context.Roles.Add(role);
+                }
+                else
+                {
+                    _context.Entry(role).State = EntityState.Modified;
+                }
+            }
+
+            foreach (var skillGroup in gameSystem.SkillGroups)
+            {
+                SetIdIfNeeded(skillGroup);
+                if (skillGroup.GameSystemId == default)
+                {
+                    skillGroup.GameSystemId = gameSystem.Id;
+                    _context.SkillGroups.Add(skillGroup);
+                }
+                else
+                {
+                    _context.Entry(skillGroup).State = EntityState.Modified;
+                }
+            }
+        }
+
+        private static void SetIdIfNeeded(IEntity entity)
+        {
+            entity.Id = entity.Id == default ? Guid.NewGuid() : entity.Id;
         }
 
         // DELETE: api/GameSystems/5

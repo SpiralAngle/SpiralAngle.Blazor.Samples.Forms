@@ -1,0 +1,202 @@
+﻿@using BlazorFormSample.Shared
+@using SpiralAngle.Blazor.Extensions.Forms
+@using BlazorFormSample.Client.Shared
+@using BlazorFormSample.Client.Shared.Editors
+@inject IService<GameSystem> GameSystemService
+@inject NavigationManager NavigationManager
+
+@implements System.IDisposable
+@page "/game_system/{GameSystemId}"
+@page "/game_system/new"
+<LoadingIndicator Entity="GameSystem">
+    <CascadingValue Value="ReadOnly">
+        <EditForm EditContext="@editContext">
+            <div class="form-row">
+                <label class="col-1 align-middle form-label-sm" label-for="game_name">Name</label>
+                <InputText class="form-control col-2 align-middle" id="game_name" @bind-Value="GameSystem.Name" @bind-disabled="ReadOnly"></InputText>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle form-label-sm" label-for="game_publisher">Publisher</label>
+                <InputText class="form-control col-2 align-middle" id="game_publisher" @bind-Value="GameSystem.Publisher" @bind-disabled="ReadOnly"></InputText>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle form-label-sm" label-for="game_version">Version</label>
+                <InputText class="form-control col-2 align-middle" id="game_version" @bind-Value="GameSystem.Version" @bind-disabled="ReadOnly"></InputText>
+            </div>
+            <div class="form-row">
+                <label class="col-1 align-middle form-label-sm" label-for="game_description">Description</label>
+                <InputTextArea class="form-control col-2 align-middle" id="game_description" @bind-Value="GameSystem.Description" @bind-disabled="ReadOnly"></InputTextArea>
+            </div>
+            <div class="card-columns">
+                <div class="card">
+                    <div class="card-header">Roles</div>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="form-row">
+                                <span class="col-3">Name</span>
+                            </div>
+                            @foreach (var item in GameSystem.Roles)
+                            {
+                                <div class="form-row">
+                                    <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer"><span class="oi oi-plus" aria-label="Add Role" @onclick="AddRole" hidden="@(ReadOnly)"></span></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Races</div>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="form-row">
+                                <span class="col-3">Name</span>
+                            </div>
+                            @foreach (var item in GameSystem.Races)
+                            {
+                                <div class="form-row">
+                                    <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer"><span class="oi oi-plus" aria-label="Add Race" @onclick="AddRace" hidden="@(ReadOnly)"></span></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Skill Groups</div>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="form-row">
+                                <span class="col-3">Name</span>
+                            </div>
+                            @foreach (var item in GameSystem.SkillGroups)
+                            {
+                                <div class="form-row">
+                                    <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer"><span class="oi oi-plus" aria-label="Add Skill Group" @onclick="AddSkillGroup" hidden="@(ReadOnly)"></span></div>
+                </div>
+            </div>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div>@ReadOnly</div>
+            <div class="col">
+                <span class="oi oi-pencil small" @onclick="StartEdit" aria-label="Start Editing" hidden="@(!ReadOnly)" tabindex="0"></span>
+                <span class="oi oi-check small" @onclick="SaveAsync" aria-label="Save" hidden="@(ReadOnly)" tabindex="0"></span>
+                <span class="oi oi-x small" @onclick="CancelAsync" aria-label="Cancel" hidden="@(ReadOnly)" tabindex="0"></span>
+            </div>
+        </EditForm>
+    </CascadingValue>
+</LoadingIndicator>
+@code {
+    [Parameter]
+    public string GameSystemId { get; set; }
+
+    protected GameSystem GameSystem { get; set; }
+
+    public bool ReadOnly { get; set; }
+    private EditContext editContext;
+    private string lastChange;
+
+    protected bool WasFromNew { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        ReadOnly = true;
+        if (new Uri(NavigationManager.Uri).Segments.Last() == "new")
+        {
+            WasFromNew = true;
+        }
+        await InitializeEditorAsync();
+    }
+
+    private async Task InitializeEditorAsync()
+    {
+        if (WasFromNew)
+        {
+            GameSystem = new GameSystem();
+            ReadOnly = false;
+        }
+        else
+        {
+            await LoadGameSystem(new Guid(GameSystemId));
+        }
+        if (editContext != null)
+        {
+            editContext.OnFieldChanged -= FieldChanged;
+        }
+        editContext = new EditContext(GameSystem);
+        editContext.OnFieldChanged += FieldChanged;
+    }
+
+    private async Task LoadGameSystem(Guid id)
+    {
+        WasFromNew = false;
+        GameSystem = await GameSystemService.GetAsync(id);
+    }
+
+    private void AddRole()
+    {
+        GameSystem.Roles.Add(new Role());
+    }
+
+    private void AddRace()
+    {
+        GameSystem.Races.Add(new Race());
+    }
+
+    private void AddSkillGroup()
+    {
+        GameSystem.SkillGroups.Add(new SkillGroup());
+    }
+
+    private async Task CancelAsync()
+    {
+        if (WasFromNew)
+        {
+            NavigationManager.NavigateTo("/Projects");
+        }
+        await InitializeEditorAsync();
+    }
+
+    private async Task SaveAsync()
+    {
+        if (!editContext.Validate())
+            return;
+        if (WasFromNew)
+        {
+            var id = (await GameSystemService.AddItemAsync(GameSystem)).ToString();
+            NavigationManager.NavigateTo($"game_system/{id}");
+        }
+        else
+        {
+            await GameSystemService.UpdateItemAsync(GameSystem);
+
+        }
+        await InitializeEditorAsync();
+        ReadOnly = true;
+    }
+
+    private void StartEdit()
+    {
+        ReadOnly = false;
+    }
+
+
+    private void FieldChanged(object sender, FieldChangedEventArgs e)
+    {
+        // just a sample of edit context play a little at being a view model.
+        lastChange = $"{e.FieldIdentifier.FieldName}:{e.FieldIdentifier.GetValue()}";
+    }
+
+    public void Dispose()
+    {
+        if (editContext != null)
+        {
+            editContext.OnFieldChanged -= FieldChanged;
+        }
+    }
+}

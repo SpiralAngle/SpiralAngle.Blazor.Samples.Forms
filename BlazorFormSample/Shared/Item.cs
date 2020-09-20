@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorFormSample.Shared
 {
-    public class Item
+    public class Item : IEntity
     {
         [Key]
         [Column("ItemId")]
         public Guid Id { get; set; }
 
         [Required]
-        [RegularExpression("^(?! )[A-Za-z0-9 \']*(?<! )$")]
+        [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
 
         [Required]
@@ -20,5 +20,8 @@ namespace BlazorFormSample.Shared
 
         [Required]
         public GameSystem GameSystem { get; set; }
+
+        [Required]
+        public  Guid GameSystemId { get; set; }
     }
 }

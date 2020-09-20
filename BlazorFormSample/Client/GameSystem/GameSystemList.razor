@@ -1,0 +1,58 @@
+﻿@using BlazorFormSample.Shared
+@using SpiralAngle.Blazor.Extensions.Forms
+@inject IService<GameSystem> GameSystemService
+@page "/game_system"
+<h3>Game System List</h3>
+<LoadingIndicator Entity="GameSystems">
+    <div class="float-right"><NavLink class="nav-link" href="/game_system/new" Match="NavLinkMatch.Prefix"><span class="oi oi-plus"></span>&nbsp;Add</NavLink></div>
+    <div class="card-group">
+        @foreach (var game in GameSystems)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <NavLink class="nav-link" href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix">@game.Name</NavLink>
+                </div>
+                <div class="card-body">
+                    <p class="game-description-truncated">@game.Description</p>
+                </div>
+                <div class="card-footer">
+                    <NavLink class="nav-link" href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix"><span class="oi oi-magnifying-glass"></span>&nbsp;Details</NavLink>
+                </div>
+            </div>
+        }
+    </div>
+</LoadingIndicator>
+
+@code {    
+
+    private IEnumerable<GameSystem> GameSystems;
+    private GameSystem entryItem = new GameSystem();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadItems();
+    }
+
+    private async Task LoadItems()
+    {
+        GameSystems = await GameSystemService.GetListAsync();
+    }
+
+    protected async Task SaveItem()
+    {
+        var response = await GameSystemService.AddItemAsync(entryItem);
+        entryItem = new GameSystem();
+        await LoadItems();
+    }
+
+    protected async Task CancelItem()
+    {
+        entryItem = new GameSystem();
+        await LoadItems();
+    }
+
+    private string GetGameSystemLink(GameSystem game)
+    {
+        return $"game_system/{game.Id}";
+    }
+}

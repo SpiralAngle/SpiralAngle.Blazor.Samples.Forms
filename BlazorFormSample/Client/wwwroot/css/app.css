@@ -121,6 +121,12 @@ app {
 .validation-message {
     color: red;
 }
+.game-description-truncated {
+    width:200ch;
+    height: 7ex;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 #blazor-error-ui {
     background: lightyellow;
