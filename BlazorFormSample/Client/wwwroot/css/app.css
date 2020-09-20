@@ -122,10 +122,9 @@ app {
     color: red;
 }
 .game-description-truncated {
-    width:200ch;
-    height: 7ex;    
+    max-height: 20ex;
     overflow: hidden;
-    text-overflow: ellipsis;
+    
 }
 
 #blazor-error-ui {

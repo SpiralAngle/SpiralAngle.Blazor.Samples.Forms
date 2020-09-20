@@ -40,9 +40,9 @@ namespace BlazorFormSample.Client.Shared
             var response = await _httpClient.PostAsJsonAsync<TEntity>(ApiUrl, item);
             response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
-            dynamic dynamo = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseContent);
-            Guid.TryParse(dynamo.id, out Guid id);
-            return id;
+            TEntity result = Newtonsoft.Json.JsonConvert.DeserializeObject<TEntity>(responseContent);
+            
+            return result.Id;
         }
 
         public async Task<Guid> UpdateItemAsync(TEntity item)
@@ -56,7 +56,7 @@ namespace BlazorFormSample.Client.Shared
 
         public async Task DeleteItemAsync(TEntity item)
         {
-            var response = await _httpClient.PutAsJsonAsync<TEntity>(ApiUrl, item);
+            var response = await _httpClient.DeleteAsync($"{ApiUrl}/{item.Id}");
             response.EnsureSuccessStatusCode();
         }
     }

@@ -9,6 +9,7 @@
 @page "/game_system/{GameSystemId}"
 @page "/game_system/new"
 <LoadingIndicator Entity="GameSystem">
+    <span class="oi oi-trash small" @onclick="DeleteAsync" aria-label="Delete" hidden="@WasFromNew" tabindex="0"></span>
     <CascadingValue Value="ReadOnly">
         <EditForm EditContext="@editContext">
             <div class="form-row">
@@ -92,8 +93,8 @@
     </CascadingValue>
 </LoadingIndicator>
 @code {
-    [Parameter]
-    public string GameSystemId { get; set; }
+        [Parameter]
+        public string GameSystemId { get; set; }
 
     protected GameSystem GameSystem { get; set; }
 
@@ -106,10 +107,7 @@
     protected override async Task OnParametersSetAsync()
     {
         ReadOnly = true;
-        if (new Uri(NavigationManager.Uri).Segments.Last() == "new")
-        {
-            WasFromNew = true;
-        }
+        WasFromNew = new Uri(NavigationManager.Uri).Segments.Last() == "new";
         await InitializeEditorAsync();
     }
 
@@ -157,9 +155,20 @@
     {
         if (WasFromNew)
         {
-            NavigationManager.NavigateTo("/Projects");
+            NavigationManager.NavigateTo("/game_system");
         }
-        await InitializeEditorAsync();
+        else
+        {
+            await InitializeEditorAsync();
+        }
+    }
+    private async Task DeleteAsync()
+    {
+        if (!WasFromNew)
+        { await GameSystemService.DeleteItemAsync(GameSystem);
+
+            NavigationManager.NavigateTo("/game_system");
+        }
     }
 
     private async Task SaveAsync()
@@ -169,6 +178,7 @@
         if (WasFromNew)
         {
             var id = (await GameSystemService.AddItemAsync(GameSystem)).ToString();
+            await InvokeAsync(StateHasChanged);
             NavigationManager.NavigateTo($"game_system/{id}");
         }
         else
