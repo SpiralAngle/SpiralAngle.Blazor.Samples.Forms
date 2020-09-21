@@ -191,7 +191,10 @@ app {
     .card-header .btn-toolbar {
         display: inline;
     }
-
+.card-subtitle{
+    font-size:0.75em;
+    padding-left:2ch;
+}
 app > .footer {
     text-align: right;
     padding-right: 1em;
