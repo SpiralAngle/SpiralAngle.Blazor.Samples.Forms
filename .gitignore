@@ -360,3 +360,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BlazorFormSample/Server/Properties/ServiceDependencies/spiralangleblazordev - Web Deploy/profile.arm.json
