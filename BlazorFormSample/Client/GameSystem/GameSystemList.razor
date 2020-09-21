@@ -15,8 +15,14 @@
         {
             <div class="card">
                 <div class="card-header">
-                    <NavLink class="nav-link" href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Go to Game System">@game.Name</NavLink>
+                    <h5 class="card-title">
+                        <NavLink href="@GetGameSystemLink(game)" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Go to Game System"><span>@game.Name</span><span>&nbsp;@($"({game.Version})")</span></NavLink>
+                    </h5>
+                    <div class="card-subtitle">
+                        @game.Publisher
+                    </div>
                 </div>
+
                 <div class="card-body">
                     <div class="game-description-truncated">@game.Description</div>
                 </div>
