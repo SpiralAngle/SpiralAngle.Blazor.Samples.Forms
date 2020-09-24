@@ -10,64 +10,32 @@
 @implements System.IDisposable
 @page "/game_system/{GameSystemId}"
 @page "/game_system/new"
-<LoadingIndicator Entity="GameSystem">
-    <div class="btn-toolbar" role="toolbar">
-        <button class="btn btn-primary" @onclick="StartEdit" aria-label="Start Editing" hidden="@(!ReadOnly)" disabled="@(!ReadOnly)" tabindex="0">
-            <span class="oi oi-pencil"></span>
-            <span>Edit</span>
-        </button>
-        <button class="btn btn-primary mr-1" @onclick="SaveAsync" aria-label="Save" hidden="@(ReadOnly || !HasChanges)" disabled="@(!HasChanges)" tabindex="0">
-            <span class="oi oi-check"></span>
-            <span>Save</span>
-        </button>
-        <button class="btn btn-secondary" @onclick="CancelAsync" aria-label="Cancel" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
-            <span class="oi oi-ban"></span>
-            <span>Cancel</span>
-        </button>
-        <div class="btn-group ml-4" role="group">
-            <button class="btn btn-outline-danger" @onclick="Delete" aria-label="Delete" hidden="@HideDelete" disabled="@HideDelete" tabindex="0">
-                <span class="oi oi-trash"></span>
-                <span>Delete</span>
-            </button>
-        </div>
-        <div class="btn-group ml-4" role="group">
-            <button class="btn btn-danger" @onclick="CancelDelete" aria-label="Cancel Delete" hidden="@HideConfirmDelete" disabled="@HideConfirmDelete" tabindex="0">
-                <span class="oi oi-bell"></span>
-                <span>Cancel Delete</span>
-                <span class="oi oi-ban"></span>
-            </button>
-            <button class="btn btn-outline-danger" @onclick="DeleteConfirmedAsync" aria-label="Confirm Delete" hidden="@HideConfirmDelete" disabled="@HideConfirmDelete" tabindex="0">
-                <span class="oi oi-trash"></span>
-                <span>Yes, Delete</span>
-                <span class="oi oi-trash"></span>
-            </button>
-        </div>
-    </div>
-
-    <CascadingValue Value="ReadOnly">
-        <EditForm EditContext="@editContext">
+<LoadingIndicator Entity="editModel?.Model">
+    <div>@editModel.ReadOnly</div>
+        <EditToolbar TEntity="BlazorFormSample.Shared.GameSystem" EditModel ="editModel"></EditToolbar>    
+        <EditForm EditContext="editModel.EditContext">
             <div class="form-row">
                 <label class="col-1 align-middle form-label-sm" label-for="game_name">Name</label>
-                <InputText class="form-control col-2 align-middle" id="game_name" @bind-Value="GameSystem.Name" @bind-disabled="ReadOnly"></InputText>
+                <InputText class="form-control col-2 align-middle" id="game_name" @bind-Value="editModel.Model.Name" @bind-disabled="@readOnly"></InputText>
             </div>
             <div class="form-row">
                 <label class="col-1 align-middle form-label-sm" label-for="game_publisher">Publisher</label>
-                <InputText class="form-control col-2 align-middle" id="game_publisher" @bind-Value="GameSystem.Publisher" @bind-disabled="ReadOnly"></InputText>
+                <InputText class="form-control col-2 align-middle" id="game_publisher" @bind-Value="editModel.Model.Publisher" @bind-disabled="readOnly"></InputText>
             </div>
             <div class="form-row">
                 <label class="col-1 align-middle form-label-sm" label-for="game_version">Version</label>
-                <InputText class="form-control col-2 align-middle" id="game_version" @bind-Value="GameSystem.Version" @bind-disabled="ReadOnly"></InputText>
+                <InputText class="form-control col-2 align-middle" id="game_version" @bind-Value="editModel.Model.Version" @bind-disabled="readOnly"></InputText>
             </div>
             <div class="form-row">
                 <label class="col-1 align-middle form-label-sm" label-for="game_description">Description</label>
-                <InputTextArea class="form-control col-4 align-middle" id="game_description" @bind-Value="GameSystem.Description" @bind-disabled="ReadOnly"></InputTextArea>
+                <InputTextArea class="form-control col-4 align-middle" id="game_description" @bind-Value="editModel.Model.Description" @bind-disabled="readOnly"></InputTextArea>
             </div>
             <div class="card-group">
                 <div class="card">
                     <div class="card-header">
                         <h4>Roles</h4>
                         <div class="btn-toolbar btn-group-sm" role="toolbar">
-                            <button class="btn btn-primary" @onclick="AddRole" aria-label="Add Role" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                            <button class="btn btn-primary" @onclick="AddRole" aria-label="Add Role" hidden="@(readOnly)" disabled="@(readOnly)" tabindex="0">
                                 <span class="oi oi-plus"></span>
                                 <span>Add</span>
                             </button>
@@ -79,11 +47,11 @@
                                 <span class="col-4">Name</span>
                                 <span class="col-1"></span>
                             </div>
-                            @foreach (var item in GameSystem.Roles)
+                            @foreach (var item in editModel.Model.Roles)
                             {
                                 <div class="form-row">
-                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
-                                    <span class="oi oi-trash col-1" aria-label="Remove Role" @onclick="x => RemoveRole(item)" hidden="@(ReadOnly)"></span>
+                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
+                                    <span class="oi oi-trash col-1" aria-label="Remove Role" @onclick="x => RemoveRole(item)" hidden="@(readOnly)"></span>
                                 </div>
                             }
                         </div>
@@ -93,7 +61,7 @@
                     <div class="card-header">
                         <h4>Races</h4>
                         <div class="btn-toolbar btn-group-sm" role="toolbar">
-                            <button class="btn btn-primary" @onclick="AddRace" aria-label="Add Race" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                            <button class="btn btn-primary" @onclick="AddRace" aria-label="Add Race" hidden="@(readOnly)" disabled="@(readOnly)" tabindex="0">
                                 <span class="oi oi-plus"></span>
                                 <span>Add</span>
                             </button>
@@ -105,11 +73,11 @@
                                 <span class="col-4">Name</span>
                                 <span class="col-1"></span>
                             </div>
-                            @foreach (var item in GameSystem.Races)
+                            @foreach (var item in editModel.Model.Races)
                             {
                                 <div class="form-row">
-                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="ReadOnly"></InputText>
-                                    <span class="oi oi-trash col-1" aria-label="Remove Race" @onclick="x => RemoveRace(item)" hidden="@(ReadOnly)"></span>
+                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
+                                    <span class="oi oi-trash col-1" aria-label="Remove Race" @onclick="x => RemoveRace(item)" hidden="@(readOnly)"></span>
                                 </div>
                             }
                         </div>
@@ -119,7 +87,7 @@
                     <div class="card-header">
                         <h4>Skill Groups</h4>
                         <div class="btn-toolbar btn-group-sm" role="toolbar">
-                            <button class="btn btn-primary" @onclick="AddSkillGroup" aria-label="Add Skill Group" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                            <button class="btn btn-primary" @onclick="AddSkillGroup" aria-label="Add Skill Group" hidden="@(readOnly)" disabled="@(readOnly)" tabindex="0">
                                 <span class="oi oi-plus"></span>
                                 <span>Add</span>
                             </button>
@@ -131,17 +99,17 @@
                                 <span class="col-4">Name</span>
                                 <span class="col-4"></span>
                             </div>
-                            @foreach (var skillGroup in GameSystem.SkillGroups)
+                            @foreach (var skillGroup in editModel.Model.SkillGroups)
                             {
                                 <div class="row">
-                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="skillGroup.Name" @bind-disabled="ReadOnly"></InputText>
+                                    <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="skillGroup.Name" @bind-disabled="readOnly"></InputText>
                                     <div class="col-2">
-                                        <button class="btn btn-primary btn-sm text-nowrap" aria-label="Add Skill to Skill GroupGroup" @onclick="x => AddSkill(skillGroup)" hidden="@(ReadOnly)" tabindex="0">
+                                        <button class="btn btn-primary btn-sm text-nowrap" aria-label="Add Skill to Skill GroupGroup" @onclick="x => AddSkill(skillGroup)" hidden="@(readOnly)" tabindex="0">
                                             <span class="oi oi-plus"></span><span>Add Skill</span>
                                         </button>
                                     </div>
                                     <div class="col-2">
-                                        <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill Group" @onclick="x => RemoveSkillGroup(skillGroup)" hidden="@(ReadOnly)" tabindex="0">
+                                        <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill Group" @onclick="x => RemoveSkillGroup(skillGroup)" hidden="@(readOnly)" tabindex="0">
                                             <span class="oi oi-trash"></span><span>Remove</span>
                                         </button>
                                     </div>
@@ -149,11 +117,11 @@
                                 @foreach (var skill in skillGroup.Skills)
                                 {
                                     <div class="row">
-                                        <InputText class="form-control form-control-sm col-4 align-middle ml-2 mr-n2" @bind-Value="skill.Name" @bind-disabled="ReadOnly"></InputText>
+                                        <InputText class="form-control form-control-sm col-4 align-middle ml-2 mr-n2" @bind-Value="skill.Name" @bind-disabled="readOnly"></InputText>
                                         <div class="col-2">
                                         </div>
                                         <div class="col-2">
-                                            <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill" @onclick="x => RemoveSkill(skillGroup, skill)" hidden="@(ReadOnly)" tabindex="0">
+                                            <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill" @onclick="x => RemoveSkill(skillGroup, skill)" hidden="@(readOnly)" tabindex="0">
                                                 <span class="oi oi-trash"></span><span>Remove</span>
                                             </button>
                                         </div>
@@ -167,72 +135,53 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
         </EditForm>
-    </CascadingValue>
 </LoadingIndicator>
 @code {
     [Parameter]
     public string GameSystemId { get; set; }
 
-    protected GameSystem GameSystem { get; set; }
-
-    public bool ReadOnly { get; set; }
-
-    private EditContext editContext;
-
-    protected bool WasFromNew { get; set; }
-
-    protected bool ConfirmDelete { get; set; } = false;
-
-    protected bool HasCollectionChanges { get; set; } = false;
-
-    protected bool HasChanges => HasCollectionChanges || editContext.IsModified();
+    EditModel<GameSystem> editModel;
+    private bool _readOnly = true;
+    private bool readOnly {
+        get
+        {
+            return _readOnly;
+        }
+        set
+        {
+            _readOnly = value;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+    private bool WasFromNew;
 
     protected override async Task OnParametersSetAsync()
     {
+        readOnly = true;
         WasFromNew = new Uri(NavigationManager.Uri).Segments.Last() == "new";
-        await InitializeEditorAsync();
-    }
-
-    private async Task InitializeEditorAsync()
-    {
-        HasCollectionChanges = false;
-        if (WasFromNew)
-        {
-            GameSystem = new GameSystem();
-            ReadOnly = false;
-        }
-        else
-        {
-            await LoadGameSystem(new Guid(GameSystemId));
-            ReadOnly = true;
-        }
-        if (editContext != null)
-        {
-            editContext.OnFieldChanged -= FieldChanged;
-        }
-        editContext = new EditContext(GameSystem);
-        editContext.OnFieldChanged += FieldChanged;
-    }
-
-    private async Task LoadGameSystem(Guid id)
-    {
-        WasFromNew = false;
-        GameSystem = await GameSystemService.GetAsync(id);
+        // await InitializeEditorAsync();
+        editModel = new EditModel<GameSystem>(GameSystemService);
+        editModel.ModelDeleted += ModelDeleted;
+        editModel.ModelSaved += ModelSaved;
+        editModel.EditCanceled += EditCanceled;
+        editModel.EditStarted += EditStarted;
+        await editModel.InitializeEditorAsync(WasFromNew ? default : new Guid(GameSystemId));
+        readOnly = !WasFromNew;
     }
 
     private void AddRole()
     {
-        GameSystem.Roles.Add(new Role());
+        editModel.Model.Roles.Add(new Role());
     }
 
     private void AddRace()
     {
-        GameSystem.Races.Add(new Race());
+        editModel.Model.Races.Add(new Race());
     }
 
     private void AddSkillGroup()
     {
-        GameSystem.SkillGroups.Add(new SkillGroup());
+        editModel.Model.SkillGroups.Add(new SkillGroup());
     }
 
     private void AddSkill(SkillGroup group)
@@ -240,113 +189,76 @@
         group.Skills.Add(new Skill());
     }
 
-    private async Task CancelAsync()
-    {
-        if (WasFromNew)
-        {
-            NavigationManager.NavigateTo("/game_system");
-        }
-        else
-        {
-            await InitializeEditorAsync();
-        }
-    }
-
-    private void CancelDelete()
-    {
-        ConfirmDelete = false;
-    }
-
-    private void Delete()
-    {
-        ConfirmDelete = true;
-    }
-
-    private async Task DeleteConfirmedAsync()
-    {
-        if (!WasFromNew && ConfirmDelete)
-        {
-            await GameSystemService.DeleteItemAsync(GameSystem);
-
-            NavigationManager.NavigateTo("/game_system");
-        }
-        ConfirmDelete = false;
-    }
-
     private void RemoveRace(Race race)
     {
-        HasCollectionChanges = GameSystem.Races.Remove(race) || HasCollectionChanges;
+        if (editModel.Model.Races.Remove(race))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "Races"));
+        }
     }
 
     private void RemoveRole(Role role)
     {
-        HasCollectionChanges = GameSystem.Roles.Remove(role) || HasCollectionChanges;
+        if (editModel.Model.Roles.Remove(role))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "Roles"));
+        }
     }
 
     private void RemoveSkillGroup(SkillGroup skillGroup)
     {
-        HasCollectionChanges = GameSystem.SkillGroups.Remove(skillGroup) || HasCollectionChanges;
+        if (editModel.Model.SkillGroups.Remove(skillGroup))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "SkillGroups"));
+        }
     }
 
     private void RemoveSkill(SkillGroup skillGroup, Skill skill)
     {
-        HasCollectionChanges = skillGroup.Skills.Remove(skill) || HasCollectionChanges;
+        if (skillGroup.Skills.Remove(skill))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(skillGroup, "Skills"));
+        }
     }
 
-    private async Task SaveAsync()
+    private void ModelSaved()
     {
-        if (!editContext.Validate())
-            return;
+        readOnly = true;
         if (WasFromNew)
         {
-            var id = (await GameSystemService.AddItemAsync(GameSystem)).ToString();
-            await InvokeAsync(StateHasChanged);
-            NavigationManager.NavigateTo($"game_system/{id}");
+            NavigationManager.NavigateTo($"game_system/{editModel.Model.Id}");
         }
-        else
+    }
+
+    private void ModelDeleted()
+    {
+        readOnly = true;
+        NavigationManager.NavigateTo("/game_system");
+    }
+
+    private void EditCanceled()
+    {
+        readOnly = true;
+        if (WasFromNew)
         {
-            await GameSystemService.UpdateItemAsync(GameSystem);
-
-        }
-        await InitializeEditorAsync();
-    }
-
-    private void StartEdit()
-    {
-        ReadOnly = false;
-    }
-
-    private bool HideConfirmDelete
-    {
-        get
-        {
-            if (WasFromNew)
-                return true;
-            return !ConfirmDelete;
+            NavigationManager.NavigateTo("/game_system");
         }
     }
 
-
-    private bool HideDelete
+    private void EditStarted()
     {
-        get
-        {
-            return WasFromNew || ConfirmDelete;
-        }
-    }
-
-
-
-    private void FieldChanged(object sender, FieldChangedEventArgs e)
-    {
-        ConfirmDelete = false;
+        readOnly = false;
     }
 
     public void Dispose()
     {
-        if (editContext != null)
+        if (editModel != null)
         {
-            editContext.OnFieldChanged -= FieldChanged;
+            editModel.ModelDeleted -= ModelDeleted;
+            editModel.ModelSaved -= ModelSaved;
+            editModel.EditCanceled -= EditCanceled;
+            editModel.EditStarted -= EditStarted;
+            editModel.Dispose();
         }
     }
 }
