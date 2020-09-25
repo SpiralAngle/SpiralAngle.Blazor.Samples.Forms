@@ -9,7 +9,7 @@ using System.Net.Http.Json;
 using BlazorFormSample.Shared;
 using System.Data;
 
-namespace BlazorFormSample.Client.Shared
+namespace BlazorFormSample.Client.SharedComponent
 {
     public abstract class ServiceBase<TEntity> : IService<TEntity> where TEntity : class, IEntity
     {

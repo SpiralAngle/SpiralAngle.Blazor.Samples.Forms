@@ -22,6 +22,9 @@ namespace BlazorFormSample.Shared
         public string Version { get; set; }
 
         [Required]
+        public IList<Attribute> Attributes { get; set; }
+
+        [Required]
         public IList<Race> Races { get; set; }
 
         [Required]
@@ -31,10 +34,12 @@ namespace BlazorFormSample.Shared
         public IList<SkillGroup> SkillGroups { get; set; }
 
         public string Description { get; set; }
+
         public string Publisher { get; set; }
 
         public GameSystem()
         {
+            Attributes = new List<Attribute>();
             Races = new List<Race>();
             Roles = new List<Role>();
             SkillGroups = new List<SkillGroup>();
