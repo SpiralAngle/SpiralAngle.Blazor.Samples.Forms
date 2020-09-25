@@ -1,4 +1,4 @@
-﻿using BlazorFormSample.Client.Shared;
+﻿using BlazorFormSample.Client.SharedComponent;
 using Models = BlazorFormSample.Shared;
 using System;
 using System.Collections.Generic;

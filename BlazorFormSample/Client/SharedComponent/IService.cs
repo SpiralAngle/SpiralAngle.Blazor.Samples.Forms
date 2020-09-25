@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorFormSample.Client.Shared
+namespace BlazorFormSample.Client.SharedComponent
 {
     public interface IService<TEntity> where TEntity : class
     {
