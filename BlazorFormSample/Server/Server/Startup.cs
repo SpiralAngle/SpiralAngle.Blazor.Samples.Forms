@@ -11,6 +11,10 @@ using BlazorFormSample.Server.Data;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.CodeAnalysis.Operations;
+using BlazorFormSample.Shared;
+using BlazorFormSample.Server.Shared;
+using BlazorFormSample.Server.GameSystemApi;
 
 namespace BlazorFormSample.Server
 {
@@ -39,6 +43,7 @@ namespace BlazorFormSample.Server
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddRazorPages();
             services.AddDbContext<CreatureDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CreatureDatabase")));
+            services.AddScoped<IEntityProvider<GameSystem>,GameSystemProvider>();
             services.AddSwaggerGen();
         }
 

@@ -17,8 +17,6 @@ namespace BlazorFormSample.Shared
         [Required]
         public decimal Modifier { get; set; }
 
-        public Race Race { get; set; }
-
         [Required]
         public Guid RaceId { get; set; }
     }
