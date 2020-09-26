@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorFormSample.Client.Shared
+namespace BlazorFormSample.Client.SharedComponent
 {
     // partial is needed to add generic constraints.
     // https://github.com/dotnet/aspnetcore/issues/8433

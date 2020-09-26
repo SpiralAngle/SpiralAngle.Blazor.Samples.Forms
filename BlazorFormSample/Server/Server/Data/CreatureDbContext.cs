@@ -12,7 +12,10 @@ namespace BlazorFormSample.Server.Data
         public DbSet<CreatureSkill> CreatureSkills { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<SkillGroup> SkillGroups { get; set; }
+        public DbSet<Attribute> Attributes{ get; set; }
         public DbSet<Race> Races { get; set; }
+        public DbSet<RaceAttributeModifier> RaceAttributeModifiers { get; set; }
+        public DbSet<RaceSkillModifier> RaceSkillModifiers { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<GameSystem> GameSystems { get; set; }
 
@@ -41,14 +44,14 @@ namespace BlazorFormSample.Server.Data
                     .OnDelete(DeleteBehavior.NoAction);
            });
 
-            modelBuilder.Entity<Item>( b =>
-            {
-                b.HasOne(c => c.GameSystem)
-                    .WithMany()
-                    .HasForeignKey(c => c.GameSystemId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .IsRequired();
-            });
+            modelBuilder.Entity<Item>(b =>
+           {
+               b.HasOne(c => c.GameSystem)
+                   .WithMany()
+                   .HasForeignKey(c => c.GameSystemId)
+                   .OnDelete(DeleteBehavior.NoAction)
+                   .IsRequired();
+           });
 
             modelBuilder.Entity<ItemInventory>(b =>
             {
@@ -85,26 +88,52 @@ namespace BlazorFormSample.Server.Data
                      .OnDelete(DeleteBehavior.NoAction);
             });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.Race", b =>
+
+            modelBuilder.Entity<Attribute>(b =>
             {
-                b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
+                b.HasOne<GameSystem>()
                     .WithMany()
                     .HasForeignKey("GameSystemId")
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
             });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.Role", b =>
+            modelBuilder.Entity<Race>(b =>
             {
-                b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
+                b.HasOne<GameSystem>()
                     .WithMany()
                     .HasForeignKey("GameSystemId")
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
             });
 
+            modelBuilder.Entity<Role>(b =>
+            {
+                b.HasOne<GameSystem>()
+                    .WithMany()
+                    .HasForeignKey("GameSystemId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<RaceAttributeModifier>(entity =>
+            {
+                entity.HasOne<Race>()
+                    .WithMany()
+                    .HasForeignKey(ram => ram.RaceId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
 
+            modelBuilder.Entity<RaceSkillModifier>(entity =>
+            {
+                entity.HasOne<Race>()
+                    .WithMany()
+                    .HasForeignKey(rsm => rsm.RaceId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             base.OnModelCreating(modelBuilder);
         }

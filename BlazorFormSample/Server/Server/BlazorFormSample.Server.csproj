@@ -30,12 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\BlazorFormSample.Client.csproj" />
-    <ProjectReference Include="..\Shared\BlazorFormSample.Shared.csproj" />
+    <Folder Include="Data\Entities\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Entities\" />
+    <ProjectReference Include="..\..\Client\Client\BlazorFormSample.Client.csproj" />
+    <ProjectReference Include="..\..\Shared\BlazorFormSample.Shared.csproj" />
   </ItemGroup>
 
 
