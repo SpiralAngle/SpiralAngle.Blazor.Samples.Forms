@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BlazorFormSample.Shared
 {
-    public class Attribute: IEntity
+    public class Attribute : IEntity
     {
         [Key]
         public Guid Id { get; set; }

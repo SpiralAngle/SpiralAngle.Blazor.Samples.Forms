@@ -22,11 +22,15 @@ namespace BlazorFormSample.Shared
         public Guid GameSystemId { get; set; }
 
         [Required]
-        public IList<RaceAttributeModifier> RaceModifiers { get; set; }
+        public IList<RaceAttributeModifier> RaceAttributeModifiers { get; set; }
+
+        [Required]
+        public IList<RaceSkillModifier> RaceSkillModifiers { get; set; }
 
         public Race()
         {
-            RaceModifiers = new List<RaceAttributeModifier>();
+            RaceAttributeModifiers = new List<RaceAttributeModifier>();
+            RaceSkillModifiers = new List<RaceSkillModifier>();
         }
 
     }
