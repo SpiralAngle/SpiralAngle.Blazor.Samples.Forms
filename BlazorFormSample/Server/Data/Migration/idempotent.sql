@@ -271,3 +271,151 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE TABLE [Attributes] (
+        [Id] uniqueidentifier NOT NULL,
+        [Name] nvarchar(max) NOT NULL,
+        [GameSystemId1] uniqueidentifier NULL,
+        [GameSystemId] uniqueidentifier NOT NULL,
+        CONSTRAINT [PK_Attributes] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Attributes_GameSystems_GameSystemId] FOREIGN KEY ([GameSystemId]) REFERENCES [GameSystems] ([GameSystemId]),
+        CONSTRAINT [FK_Attributes_GameSystems_GameSystemId1] FOREIGN KEY ([GameSystemId1]) REFERENCES [GameSystems] ([GameSystemId]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE TABLE [RaceSkillModifiers] (
+        [Id] uniqueidentifier NOT NULL,
+        [SkillId] uniqueidentifier NOT NULL,
+        [Modifier] decimal(18,2) NOT NULL,
+        [RaceId] uniqueidentifier NOT NULL,
+        [RaceId1] uniqueidentifier NULL,
+        CONSTRAINT [PK_RaceSkillModifiers] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RaceSkillModifiers_Races_RaceId] FOREIGN KEY ([RaceId]) REFERENCES [Races] ([RaceId]) ON DELETE CASCADE,
+        CONSTRAINT [FK_RaceSkillModifiers_Races_RaceId1] FOREIGN KEY ([RaceId1]) REFERENCES [Races] ([RaceId]) ON DELETE NO ACTION,
+        CONSTRAINT [FK_RaceSkillModifiers_Skills_SkillId] FOREIGN KEY ([SkillId]) REFERENCES [Skills] ([SkillId]) ON DELETE CASCADE
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE TABLE [RaceAttributeModifiers] (
+        [Id] uniqueidentifier NOT NULL,
+        [AttributeId] uniqueidentifier NOT NULL,
+        [Modifier] decimal(18,2) NOT NULL,
+        [RaceId] uniqueidentifier NOT NULL,
+        [RaceId1] uniqueidentifier NULL,
+        CONSTRAINT [PK_RaceAttributeModifiers] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RaceAttributeModifiers_Attributes_AttributeId] FOREIGN KEY ([AttributeId]) REFERENCES [Attributes] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_RaceAttributeModifiers_Races_RaceId] FOREIGN KEY ([RaceId]) REFERENCES [Races] ([RaceId]) ON DELETE CASCADE,
+        CONSTRAINT [FK_RaceAttributeModifiers_Races_RaceId1] FOREIGN KEY ([RaceId1]) REFERENCES [Races] ([RaceId]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_Attributes_GameSystemId] ON [Attributes] ([GameSystemId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_Attributes_GameSystemId1] ON [Attributes] ([GameSystemId1]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_RaceAttributeModifiers_AttributeId] ON [RaceAttributeModifiers] ([AttributeId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_RaceAttributeModifiers_RaceId] ON [RaceAttributeModifiers] ([RaceId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_RaceAttributeModifiers_RaceId1] ON [RaceAttributeModifiers] ([RaceId1]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_RaceSkillModifiers_RaceId] ON [RaceSkillModifiers] ([RaceId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_RaceSkillModifiers_RaceId1] ON [RaceSkillModifiers] ([RaceId1]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    CREATE INDEX [IX_RaceSkillModifiers_SkillId] ON [RaceSkillModifiers] ([SkillId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200926205216_AddAttributes')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200926205216_AddAttributes', N'3.1.8');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927030707_AddMinMaxToAttribute')
+BEGIN
+    ALTER TABLE [Attributes] ADD [Maximum] decimal(18,2) NOT NULL DEFAULT 0.0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927030707_AddMinMaxToAttribute')
+BEGIN
+    ALTER TABLE [Attributes] ADD [Minimum] decimal(18,2) NOT NULL DEFAULT 0.0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927030707_AddMinMaxToAttribute')
+BEGIN
+    ALTER TABLE [Attributes] ADD [ModifiedMaximum] decimal(18,2) NOT NULL DEFAULT 0.0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927030707_AddMinMaxToAttribute')
+BEGIN
+    ALTER TABLE [Attributes] ADD [ModifiedMinimum] decimal(18,2) NOT NULL DEFAULT 0.0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927030707_AddMinMaxToAttribute')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200927030707_AddMinMaxToAttribute', N'3.1.8');
+END;
+
+GO

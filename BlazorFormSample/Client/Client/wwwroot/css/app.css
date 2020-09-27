@@ -215,6 +215,10 @@ app > .footer {
     background: none;
 }
 
+.form-row .grid-head > span {
+    font-size:0.5em
+}
+
 .game-description-truncated {
     max-height: 20ex;
     overflow: hidden;

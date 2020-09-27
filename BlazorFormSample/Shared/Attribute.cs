@@ -18,5 +18,13 @@ namespace BlazorFormSample.Shared
 
         [Required]
         public Guid GameSystemId { get; set; }
+
+        public Decimal ModifiedMinimum { get; set; }
+
+        public Decimal Minimum { get; set; }
+
+        public Decimal Maximum { get; set; }
+
+        public Decimal ModifiedMaximum { get; set; }
     }
 }

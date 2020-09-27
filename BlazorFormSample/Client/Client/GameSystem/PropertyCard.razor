@@ -1,0 +1,44 @@
+﻿@using BlazorFormSample.Shared
+@using Humanizer
+@typeparam TEntity
+
+<div class="card">
+    <div class="card-header">
+        <h4>@title</h4>
+        <div class="btn-toolbar btn-group-sm" role="toolbar">
+            <button class="btn btn-primary" @onclick="AddItemDelegate" aria-label="@($"Add {EntityName}")" hidden="@(ReadOnly)" disabled="@(ReadOnly)" tabindex="0">
+                <span class="oi oi-plus"></span>
+                <span>Add</span>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">                                     
+                @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string EntityName { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public IList<TEntity> EntityList { get; set; }
+
+    [Parameter]
+    public Action AddItemDelegate { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    private string title;
+
+    protected override void OnParametersSet()
+    {
+        title = typeof(TEntity).Name.Pluralize().Humanize().Transform(To.TitleCase);
+    }
+}

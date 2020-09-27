@@ -44,8 +44,8 @@
                 <div class="card-body">
                     <div class="container">
                         <div class="form-row">
-                            <span class="col-4">Name</span>
-                            <span class="col-1"></span>
+                            <span class="col-4 form-control-sm">Name</span>
+                            <span class="col-1 form-control-sm"></span>
                         </div>
                         @foreach (var item in editModel.Model.Roles)
                         {
@@ -70,8 +70,8 @@
                 <div class="card-body">
                     <div class="container">
                         <div class="form-row">
-                            <span class="col-4">Name</span>
-                            <span class="col-1"></span>
+                            <span class="col-4 form-control-sm">Name</span>
+                            <span class="col-1 form-control-sm"></span>
                         </div>
                         @foreach (var item in editModel.Model.Races)
                         {
@@ -83,6 +83,27 @@
                     </div>
                 </div>
             </div>
+            <PropertyCard EntityList="editModel.Model.Attributes" AddItemDelegate="AddAttribute" EntityName="Attribute" ReadOnly="readOnly">
+                <div class="form-row">
+                    <span class="col-3 form-control-sm align-left">Name</span>
+                    <span class="col-2 form-control-sm align-middle">Modified Min</span>
+                    <span class="col-2 form-control-sm align-middle">Minimum</span>
+                    <span class="col-2 form-control-sm align-middle">Maximum</span>
+                    <span class="col-2 form-control-sm align-middle">Modified Max</span>
+                    <span class="col-1 form-control-sm"></span>
+                </div>
+                @foreach (var item in editModel.Model.Attributes)
+                {
+                    <div class="form-row">
+                        <InputText class="form-control form-control-sm col-3 align-left" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMinimum" @bind-disabled="readOnly"></InputNumber>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Minimum" @bind-disabled="readOnly"></InputNumber>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Maximum" @bind-disabled="readOnly"></InputNumber>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMaximum" @bind-disabled="readOnly"></InputNumber>
+                        <span class="oi oi-trash col-1" aria-label="Remove Attribute" @onclick="x => RemoveAttribute(item)" hidden="@(readOnly)"></span>
+                    </div>
+                }
+            </PropertyCard>
             <div class="card">
                 <div class="card-header">
                     <h4>Skill Groups</h4>
@@ -170,6 +191,19 @@
         readOnly = !WasFromNew;
     }
 
+    private void AddAttribute()
+    {
+        var last = editModel.Model.Attributes.LastOrDefault();
+
+        editModel.Model.Attributes.Add(last == null ? new BlazorFormSample.Shared.Attribute() : new BlazorFormSample.Shared.Attribute
+        {
+            ModifiedMinimum = last.ModifiedMinimum,
+            Minimum = last.Minimum,
+            Maximum = last.Maximum,
+            ModifiedMaximum = last.ModifiedMaximum
+        });
+    }
+
     private void AddRole()
     {
         editModel.Model.Roles.Add(new Role());
@@ -188,6 +222,14 @@
     private void AddSkill(SkillGroup group)
     {
         group.Skills.Add(new Skill());
+    }
+
+    private void RemoveAttribute(BlazorFormSample.Shared.Attribute attribute)
+    {
+        if (editModel.Model.Attributes.Remove(attribute))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "Attributes"));
+        }
     }
 
     private void RemoveRace(Race race)
