@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 
-namespace BlazorFormSample.Client.GameSystem
+namespace BlazorFormSample.Client.GameSystems
 {
     public class GameSystemService : ServiceBase<Models.GameModels.GameSystem>
     {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using BlazorFormSample.Client.GameSystem;
+using BlazorFormSample.Client.GameSystems;
 using BlazorFormSample.Client.SharedComponent;
 using Models = BlazorFormSample.Shared;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;

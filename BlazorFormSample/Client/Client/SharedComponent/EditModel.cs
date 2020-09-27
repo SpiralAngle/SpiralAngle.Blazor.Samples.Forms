@@ -42,8 +42,6 @@ namespace BlazorFormSample.Client.SharedComponent
             }
         }
 
-        private NavigationManager _navigationManager { get; }
-
         public event Action ModelDeleted;
         public event Action ModelSaved;
         public event Action EditCanceled;

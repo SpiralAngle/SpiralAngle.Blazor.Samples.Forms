@@ -56,7 +56,10 @@ namespace BlazorFormSample.Shared.Tests.GameModels
 
             IList<System.ComponentModel.DataAnnotations.ValidationResult> result = attribute.ValidateModel();
 
-            Assert.Collection(result, x => Assert.True(x.MemberNames.Contains("Minimum") ));
+            Assert.Collection(result, x => Assert.Collection(x.MemberNames,
+                firstMemberName => Assert.Equal("ModifiedMinimum", firstMemberName),
+                secondMemberName => Assert.Equal("Minimum", secondMemberName)
+                ));
         }
 
         [Fact]
@@ -76,7 +79,7 @@ namespace BlazorFormSample.Shared.Tests.GameModels
         {
             Models.Attribute attribute = new Models.Attribute
             {
-                Name = "Bob",                
+                Name = "Bob",
                 ModifiedMinimum = 2,
                 Minimum = 2,
                 Maximum = 3,

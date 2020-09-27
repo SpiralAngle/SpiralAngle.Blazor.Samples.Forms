@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\Shared\Shared\BlazorFormSample.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Creatures\" />
+  </ItemGroup>
+
 </Project>
