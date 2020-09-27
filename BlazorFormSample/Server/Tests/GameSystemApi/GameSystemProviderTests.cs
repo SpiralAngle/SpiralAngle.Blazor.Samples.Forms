@@ -17,7 +17,7 @@ using Xunit;
 namespace BlazorFormSample.Server.Tests.GameSystemApi
 {
     public class GameSystemProviderTests : IClassFixture<CreatureDbContextFixture>
-    {       
+    {
 
         public CreatureDbContextFixture Fixture { get; }
 
@@ -80,21 +80,41 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
         public async Task Update_Updates()
         {
             const string newRoleName = "ro2";
+            const string newSkillName = "sk15";
+            const string skillGroup2Name = "sg2";
+            const string skill2Name = "sk2";
 
+            Guid gameSystemId = new Guid("10000000-0000-0000-0000-000000000000");
             using (var transaction = Fixture.Connection.BeginTransaction())
             {
                 using (var context = Fixture.CreateContext(transaction))
                 {
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
 
-                    var system = await entityProvider.GetAsync(new Guid("10000000-0000-0000-0000-000000000000"));
+
+                    var system = await entityProvider.GetAsync(gameSystemId);
 
                     system.Roles.Remove(system.Roles.First());
-                    system.Roles.Add(new Role { Name = newRoleName });                   
+                    system.Roles.Add(new Role { Name = newRoleName });
 
-                    Assert.True(system.Roles.Count == 1);
-                    Assert.True(system.Roles.FirstOrDefault()?.Name == newRoleName);
 
+                    system.SkillGroups.FirstOrDefault().Skills.FirstOrDefault().Name = newSkillName;
+                    system.SkillGroups.Add(new SkillGroup
+                    {
+                        Name = skillGroup2Name,
+                        Skills = new List<Skill>
+                        {
+                            new Skill { Name = skill2Name }
+                        }
+                    });
+
+                    await entityProvider.UpdateAsync(system);
+
+                    var retrievedSystem = await entityProvider.GetAsync(new Guid("10000000-0000-0000-0000-000000000000"));
+                    Assert.True(retrievedSystem.Roles.Count == 1);
+                    Assert.Equal(newRoleName, retrievedSystem.Roles.FirstOrDefault()?.Name);
+                    Assert.Equal(newSkillName, retrievedSystem.SkillGroups.FirstOrDefault(x => x.Name == "sg1").Skills.FirstOrDefault().Name);
+                    Assert.Equal(skill2Name, retrievedSystem.SkillGroups.FirstOrDefault(x => x.Name == skillGroup2Name).Skills.FirstOrDefault().Name);
                 }
             }
         }
@@ -108,7 +128,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
                 {
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
                     Guid id = new Guid("10000000-0000-0000-0000-000000000000");
-                    var result =  await entityProvider.DeleteAsync(id);
+                    var result = await entityProvider.DeleteAsync(id);
 
                     var retrievedSystem = await entityProvider.GetAsync(id);
 

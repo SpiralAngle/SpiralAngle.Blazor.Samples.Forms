@@ -1,7 +1,9 @@
 ﻿using BlazorFormSample.Server.Data;
 using BlazorFormSample.Server.Shared;
 using BlazorFormSample.Shared;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Schema;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,21 +37,7 @@ namespace BlazorFormSample.Server.GameSystemApi
             {
                 return false;
             }
-
-            foreach (var role in gameSystem.Roles)
-            {
-                _context.Roles.Remove(role);
-            }
-            foreach (var race in gameSystem.Races)
-            {
-                _context.Races.Remove(race);
-            }
-            foreach (var skillGroup in gameSystem.SkillGroups)
-            {
-                RemoveEntity(skillGroup);
-            }
-
-            _context.GameSystems.Remove(gameSystem);
+            RemoveEntity(gameSystem);
             await _context.SaveChangesAsync();
 
             return true;
@@ -70,39 +58,7 @@ namespace BlazorFormSample.Server.GameSystemApi
 
             SetChildIds(entity);
             var existing = await GetGameSystemAsync(entity.Id);
-            foreach (var role in existing.Roles)
-            {
-                if (entity.Roles.All(x => x.Id != role.Id))
-                {
-                    RemoveEntity(role);                    
-                }
-            }
-            foreach (var race in existing.Races)
-            {
-                if (entity.Races.All(x => x.Id != race.Id))
-                {
-                    RemoveEntity(race);                    
-                }
-            }
-
-            foreach (var skillGroup in existing.SkillGroups)
-            {
-                var incomingGroup = entity.SkillGroups.FirstOrDefault(x => x.Id == skillGroup.Id);
-                if (incomingGroup == null)
-                {
-                    RemoveEntity(skillGroup);
-                }
-                else
-                {
-                    foreach (var skill in skillGroup.Skills)
-                    {
-                        if (incomingGroup.Skills.All(x => x.Id != skill.Id))
-                        {
-                            _context.Entry(skill).State = EntityState.Deleted;
-                        }
-                    }
-                }
-            }
+            RemoveOrphans(existing, entity);
 
             _context.Entry(entity).State = EntityState.Modified;
 
@@ -189,17 +145,49 @@ namespace BlazorFormSample.Server.GameSystemApi
             entity.Id = entity.Id == default ? Guid.NewGuid() : entity.Id;
         }
 
+        private void RemoveOrphans<T>(T existing, T incoming)
+        {
+            var listProperties = existing.GetType().GetProperties().Where(p => p.PropertyType != typeof(string) && p.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)));
+            foreach (var collection in listProperties)
+            {
+                var existingCollection = collection.GetValue(existing) as IEnumerable;
+                var incomingCollection = collection.GetValue(incoming) as IEnumerable;
+
+                foreach (IEntity existingItem in existingCollection)
+                {
+                    IEntity foundItem = null;
+                    foreach (IEntity incomingItem in incomingCollection)
+                    {
+                        if (existingItem.Id == incomingItem.Id)
+                        {
+                            foundItem = incomingItem;
+                            break;
+                        }
+                    }
+                    if (foundItem == null)
+                    {
+                        RemoveEntity(existingItem);
+                    }
+                    else
+                    {
+                        RemoveOrphans(existingItem, foundItem);
+                    }
+                }
+            }
+        }
+
+
         private void RemoveEntity<T>(T entity) where T : IEntity
-        {         
+        {
             var listProperties = entity.GetType().GetProperties().Where(p => p.PropertyType != typeof(string) && p.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)));
             foreach (var collection in listProperties)
             {
                 var coll = collection.GetValue(entity) as IEnumerable;
-                
-                    foreach (var item in coll)
-                    {
-                        RemoveEntity(item as IEntity);
-                    }                
+
+                foreach (var item in coll)
+                {
+                    RemoveEntity(item as IEntity);
+                }
             }
             _context.Entry(entity).State = EntityState.Deleted;
         }
