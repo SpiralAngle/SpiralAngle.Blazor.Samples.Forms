@@ -73,10 +73,12 @@ namespace BlazorFormSample.Server.Tests.Utility
                             GameSystem system1 = new GameSystem
                             {
                                 Id =  gameSystemId,
-                                Name = "Name",
-                                Version = "Version",
+                                Name = "Name1",
+                                Version = "Version1",
                                 Roles = new List<Role> { new Role { Name = "ro1", GameSystemId = gameSystemId} },
                                 Races = new List<Race> { new Race { Name = "ra1", GameSystemId = gameSystemId } },
+                                Attributes = new List<BlazorFormSample.Shared.Attribute> {
+                                    new BlazorFormSample.Shared.Attribute { Name ="at1", GameSystemId = gameSystemId } },
                                 SkillGroups = new List<SkillGroup>
                                 {
                                     new SkillGroup
