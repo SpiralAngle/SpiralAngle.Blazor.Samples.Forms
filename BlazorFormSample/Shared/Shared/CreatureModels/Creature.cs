@@ -33,28 +33,10 @@ namespace BlazorFormSample.Shared.CreatureModels
         public Guid RoleId { get; set; }
 
         [Required]
-        [Range(0, 100)]
-        public int Strength { get; set; }
+        public IList<CreatureAttribute> Attributes { get; set; }
 
         [Required]
-        [Range(0, 100)]
-        public int Dexterity { get; set; }
-
-        [Required]
-        [Range(0, 100)]
-        public int Constitution { get; set; }
-
-        [Required]
-        [Range(0, 100)]
-        public int Intelligence { get; set; }
-
-        [Required]
-        [Range(0, 100)]
-        public int Wisdom { get; set; }
-
-        [Required]
-        [Range(0, 100)]
-        public int Charisma { get; set; }
+        public IList<CreatureSkill> Skills { get; set; }
 
         public string Description { get; set; }
 
@@ -63,6 +45,8 @@ namespace BlazorFormSample.Shared.CreatureModels
         public Creature()
         {
             InventoryItems = new List<ItemInventory>();
+            Attributes = new List<CreatureAttribute>();
+            Skills = new List<CreatureSkill>();
         }
     }
 }

@@ -15,6 +15,8 @@ using Microsoft.CodeAnalysis.Operations;
 using BlazorFormSample.Server.Shared;
 using BlazorFormSample.Server.GameSystemApi;
 using BlazorFormSample.Shared.GameModels;
+using BlazorFormSample.Shared.CreatureModels;
+using BlazorFormSample.Server.CreatureApi;
 
 namespace BlazorFormSample.Server
 {
@@ -44,6 +46,7 @@ namespace BlazorFormSample.Server
             services.AddRazorPages();
             services.AddDbContext<CreatureDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CreatureDatabase")));
             services.AddScoped<IEntityProvider<GameSystem>,GameSystemProvider>();
+            services.AddScoped<IEntityProvider<Creature>, CreatureProvider>();
             services.AddSwaggerGen();
         }
 

@@ -11,7 +11,7 @@ using BlazorFormSample.Client.GameSystems;
 using BlazorFormSample.Client.SharedComponent;
 using Models = BlazorFormSample.Shared;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-
+using BlazorFormSample.Client.Creatures;
 
 namespace BlazorFormSample.Client
 {
@@ -40,6 +40,7 @@ namespace BlazorFormSample.Client
             });
 
             builder.Services.AddScoped<IService<Models.GameModels.GameSystem>, GameSystemService>();
+            builder.Services.AddScoped<IService<Models.CreatureModels.Creature>, CreatureService>();
             await builder.Build().RunAsync();
         }
 

@@ -11,6 +11,7 @@ namespace BlazorFormSample.Server.Data
         public DbSet<ItemInventory> InventoryItems { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<CreatureSkill> CreatureSkills { get; set; }
+        public DbSet<CreatureAttribute> CreatureAttributes { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<SkillGroup> SkillGroups { get; set; }
         public DbSet<Attribute> Attributes{ get; set; }
@@ -89,6 +90,19 @@ namespace BlazorFormSample.Server.Data
                      .OnDelete(DeleteBehavior.NoAction);
             });
 
+
+            modelBuilder.Entity<CreatureAttribute>(entity =>
+            {
+                entity.HasOne("Attribute")
+                     .WithMany()
+                     .HasForeignKey("AttributeId")
+                     .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne("Creature")
+                     .WithMany()
+                     .HasForeignKey("CreatureId")
+                     .OnDelete(DeleteBehavior.NoAction);
+            });
 
             modelBuilder.Entity<Attribute>(b =>
             {
