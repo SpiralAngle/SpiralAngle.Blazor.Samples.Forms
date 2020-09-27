@@ -9,7 +9,7 @@ using System.Net.Http;
 
 namespace BlazorFormSample.Client.GameSystem
 {
-    public class GameSystemService : ServiceBase<Models.GameSystem>
+    public class GameSystemService : ServiceBase<Models.GameModels.GameSystem>
     {
         public GameSystemService(IConfiguration configuration, HttpClient httpClient) : base(configuration, httpClient)
         {

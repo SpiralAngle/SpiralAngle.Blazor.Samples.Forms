@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BlazorFormSample.Shared.GameModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.CreatureModels
 {
     public class Creature : IEntity
     {
@@ -18,14 +19,14 @@ namespace BlazorFormSample.Shared
         public GameSystem GameSystem { get; set; }
 
         [Required]
-        
+
         public Guid GameSystemId { get; set; }
 
         public Race Race { get; set; }
 
         [Required]
         public Guid RaceId { get; set; }
-       
+
         public Role Role { get; set; }
 
         [Required]

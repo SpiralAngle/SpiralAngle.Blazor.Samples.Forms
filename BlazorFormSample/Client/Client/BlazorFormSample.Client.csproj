@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\SpiralAngle.Blazor.Extensions\SpiralAngle.Blazor.Extensions.csproj" />
-    <ProjectReference Include="..\..\Shared\BlazorFormSample.Shared.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared\BlazorFormSample.Shared.csproj" />
   </ItemGroup>
 
 </Project>

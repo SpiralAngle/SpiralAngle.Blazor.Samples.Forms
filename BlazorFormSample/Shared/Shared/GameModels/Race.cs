@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.GameModels
 {
     public class Race : IEntity
     {
@@ -15,7 +15,7 @@ namespace BlazorFormSample.Shared
         [Required]
         [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
-        
+
         public GameSystem GameSystem { get; set; }
 
         [Required]

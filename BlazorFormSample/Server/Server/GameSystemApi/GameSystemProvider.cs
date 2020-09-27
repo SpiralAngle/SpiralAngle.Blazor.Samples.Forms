@@ -1,6 +1,6 @@
 ﻿using BlazorFormSample.Server.Data;
 using BlazorFormSample.Server.Shared;
-using BlazorFormSample.Shared;
+using BlazorFormSample.Shared.GameModels;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Schema;

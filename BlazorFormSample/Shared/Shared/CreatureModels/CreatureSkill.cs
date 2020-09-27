@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BlazorFormSample.Shared.GameModels;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.CreatureModels
 {
     public class CreatureSkill : IEntity
     {
@@ -20,6 +21,6 @@ namespace BlazorFormSample.Shared
         public Guid SkillId { get; set; }
 
         [Required]
-        public Decimal Rank { get; set; }
+        public decimal Rank { get; set; }
     }
 }

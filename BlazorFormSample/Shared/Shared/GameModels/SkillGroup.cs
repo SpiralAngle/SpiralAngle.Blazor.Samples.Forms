@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.GameModels
 {
     public class SkillGroup : IEntity
     {

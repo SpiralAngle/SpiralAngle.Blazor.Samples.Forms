@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Client\Client\BlazorFormSample.Client.csproj" />
-    <ProjectReference Include="..\..\Shared\BlazorFormSample.Shared.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared\BlazorFormSample.Shared.csproj" />
   </ItemGroup>
 
 

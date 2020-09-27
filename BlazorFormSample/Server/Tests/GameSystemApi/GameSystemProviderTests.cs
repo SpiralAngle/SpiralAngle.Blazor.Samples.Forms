@@ -2,7 +2,7 @@ using BlazorFormSample.Server.Data;
 using BlazorFormSample.Server.GameSystemApi;
 using BlazorFormSample.Server.Shared;
 using BlazorFormSample.Server.Tests.Utility;
-using BlazorFormSample.Shared;
+using BlazorFormSample.Shared.GameModels;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

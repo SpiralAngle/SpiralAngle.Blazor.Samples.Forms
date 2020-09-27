@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BlazorFormSample.Shared.GameModels;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.CreatureModels
 {
     public class ItemInventory : IEntity
     {
@@ -17,7 +18,7 @@ namespace BlazorFormSample.Shared
         public Guid ItemId { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]        
+        [Range(0, double.MaxValue)]
         public decimal Quantity { get; set; }
 
         [Required]

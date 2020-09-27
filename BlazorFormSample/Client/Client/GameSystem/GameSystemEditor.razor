@@ -1,18 +1,18 @@
 ﻿@using BlazorFormSample.Shared
 @using SpiralAngle.Blazor.Extensions.Forms
 @using BlazorFormSample.Client.SharedComponent
-@using BlazorFormSample.Client.Shared
 @using BlazorFormSample.Client.Shared.Editors
+@using BlazorFormSample.Shared.GameModels
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
-@inject IService<GameSystem> GameSystemService
+@inject IService<BlazorFormSample.Shared.GameModels.GameSystem> GameSystemService
 @inject NavigationManager NavigationManager
 
 @implements System.IDisposable
 @page "/game_system/{GameSystemId}"
 @page "/game_system/new"
 <LoadingIndicator Entity="editModel?.Model">
-    <EditToolbar TEntity="BlazorFormSample.Shared.GameSystem" EditModel="editModel"></EditToolbar>
+    <EditToolbar TEntity="BlazorFormSample.Shared.GameModels.GameSystem" EditModel="editModel"></EditToolbar>
     <EditForm EditContext="editModel.EditContext">
         <div class="form-row">
             <label class="col-1 align-middle form-label-sm" label-for="game_name">Name</label>
@@ -195,7 +195,7 @@
     {
         var last = editModel.Model.Attributes.LastOrDefault();
 
-        editModel.Model.Attributes.Add(last == null ? new BlazorFormSample.Shared.Attribute() : new BlazorFormSample.Shared.Attribute
+        editModel.Model.Attributes.Add(last == null ? new BlazorFormSample.Shared.GameModels.Attribute() : new BlazorFormSample.Shared.GameModels.Attribute
         {
             ModifiedMinimum = last.ModifiedMinimum,
             Minimum = last.Minimum,
@@ -224,7 +224,7 @@
         group.Skills.Add(new Skill());
     }
 
-    private void RemoveAttribute(BlazorFormSample.Shared.Attribute attribute)
+    private void RemoveAttribute(BlazorFormSample.Shared.GameModels.Attribute attribute)
     {
         if (editModel.Model.Attributes.Remove(attribute))
         {

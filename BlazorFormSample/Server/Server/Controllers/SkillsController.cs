@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlazorFormSample.Server.Data;
-using BlazorFormSample.Shared;
 using Microsoft.AspNetCore.Authorization;
+using BlazorFormSample.Shared.GameModels;
 
 namespace BlazorFormSample.Server.Controllers
 {

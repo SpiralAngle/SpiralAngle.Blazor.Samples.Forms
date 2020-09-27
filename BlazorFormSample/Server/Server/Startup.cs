@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.CodeAnalysis.Operations;
-using BlazorFormSample.Shared;
 using BlazorFormSample.Server.Shared;
 using BlazorFormSample.Server.GameSystemApi;
+using BlazorFormSample.Shared.GameModels;
 
 namespace BlazorFormSample.Server
 {

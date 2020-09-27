@@ -1,5 +1,5 @@
 ﻿using BlazorFormSample.Server.Data;
-using BlazorFormSample.Shared;
+using BlazorFormSample.Shared.GameModels;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -77,8 +77,8 @@ namespace BlazorFormSample.Server.Tests.Utility
                                 Version = "Version1",
                                 Roles = new List<Role> { new Role { Name = "ro1", GameSystemId = gameSystemId} },
                                 Races = new List<Race> { new Race { Name = "ra1", GameSystemId = gameSystemId } },
-                                Attributes = new List<BlazorFormSample.Shared.Attribute> {
-                                    new BlazorFormSample.Shared.Attribute { Name ="at1", GameSystemId = gameSystemId } },
+                                Attributes = new List<BlazorFormSample.Shared.GameModels.Attribute> {
+                                    new BlazorFormSample.Shared.GameModels.Attribute { Name ="at1", GameSystemId = gameSystemId } },
                                 SkillGroups = new List<SkillGroup>
                                 {
                                     new SkillGroup

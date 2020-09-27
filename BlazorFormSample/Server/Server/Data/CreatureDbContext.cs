@@ -1,4 +1,5 @@
-﻿using BlazorFormSample.Shared;
+﻿using BlazorFormSample.Shared.CreatureModels;
+using BlazorFormSample.Shared.GameModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.GameModels
 {
     public class RaceSkillModifier : IEntity
     {

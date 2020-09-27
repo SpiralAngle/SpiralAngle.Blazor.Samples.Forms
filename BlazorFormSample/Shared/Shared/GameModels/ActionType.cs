@@ -1,4 +1,4 @@
-﻿namespace BlazorFormSample.Shared
+﻿namespace BlazorFormSample.Shared.GameModels
 {
     public enum ActionType
     {

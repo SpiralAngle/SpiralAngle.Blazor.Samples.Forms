@@ -39,7 +39,7 @@ namespace BlazorFormSample.Client
                 options.ProviderOptions.DefaultAccessTokenScopes.Add(scope);
             });
 
-            builder.Services.AddScoped<IService<Models.GameSystem>, GameSystemService>();
+            builder.Services.AddScoped<IService<Models.GameModels.GameSystem>, GameSystemService>();
             await builder.Build().RunAsync();
         }
 

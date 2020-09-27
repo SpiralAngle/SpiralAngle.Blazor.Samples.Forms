@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.GameModels
 {
     public class GameSystem : IEntity
     {

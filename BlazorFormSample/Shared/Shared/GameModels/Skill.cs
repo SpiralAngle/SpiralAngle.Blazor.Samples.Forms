@@ -2,26 +2,20 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlazorFormSample.Shared
+namespace BlazorFormSample.Shared.GameModels
 {
-    public class Item : IEntity
+    public class Skill : IEntity
     {
         [Key]
-        [Column("ItemId")]
+        [Column("SkillId")]
         public Guid Id { get; set; }
 
         [Required]
         [RegularExpression("^(?! )[\\S\\s]*(?<! )$")]
         public string Name { get; set; }
+        public SkillGroup SkillGroup { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public decimal Weight { get; set; }
-
-        [Required]
-        public GameSystem GameSystem { get; set; }
-
-        [Required]
-        public  Guid GameSystemId { get; set; }
+        public Guid SkillGroupId { get; set; }
     }
 }

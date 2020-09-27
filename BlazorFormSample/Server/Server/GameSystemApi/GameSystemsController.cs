@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlazorFormSample.Server.Data;
-using BlazorFormSample.Shared;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -15,6 +14,7 @@ using Microsoft.CodeAnalysis;
 using System.Collections;
 using System.Runtime.InteropServices.ComTypes;
 using BlazorFormSample.Server.Shared;
+using BlazorFormSample.Shared.GameModels;
 
 namespace BlazorFormSample.Server.GameSystemApi
 {
@@ -56,8 +56,13 @@ namespace BlazorFormSample.Server.GameSystemApi
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGameSystem(Guid id, GameSystem gameSystem)
-        {
+        {            
             if (id != gameSystem.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -74,6 +79,11 @@ namespace BlazorFormSample.Server.GameSystemApi
         [HttpPost]
         public async Task<ActionResult<GameSystem>> PostGameSystem(GameSystem gameSystem)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             var newId = await _entityProvider.AddAsync(gameSystem);
             gameSystem.Id = newId;
             return CreatedAtAction("GetGameSystem", new { id = newId }, await _entityProvider.GetAsync(newId));
