@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorFormSample.Shared", "BlazorFormSample\Shared\BlazorFormSample.Shared.csproj", "{51D290F5-65BC-48DC-B129-F3111B3AE311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorFormSample.Shared", "BlazorFormSample\Shared\Shared\BlazorFormSample.Shared.csproj", "{51D290F5-65BC-48DC-B129-F3111B3AE311}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiralAngle.Blazor.Extensions", "SpiralAngle.Blazor.Extensions\SpiralAngle.Blazor.Extensions.csproj", "{6DDA6BD5-8377-4662-B818-59B5E90CAFF8}"
 EndProject
@@ -26,6 +26,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{4B901647-6271-4313-9340-78442BCDF285}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorFormSample.Client", "BlazorFormSample\Client\Client\BlazorFormSample.Client.csproj", "{64E7601F-47C6-40FA-BD70-C9A53C8CBF2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{3346D0F4-529C-4053-8E7E-9CBBE6954A4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorFormSample.Shared.Tests", "BlazorFormSample\Shared\BlazorFormSample.Shared.Tests\BlazorFormSample.Shared.Tests.csproj", "{4738C8AB-2A60-4FC9-BA64-77170DF17D6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,15 +61,21 @@ Global
 		{64E7601F-47C6-40FA-BD70-C9A53C8CBF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64E7601F-47C6-40FA-BD70-C9A53C8CBF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64E7601F-47C6-40FA-BD70-C9A53C8CBF2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4738C8AB-2A60-4FC9-BA64-77170DF17D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4738C8AB-2A60-4FC9-BA64-77170DF17D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4738C8AB-2A60-4FC9-BA64-77170DF17D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4738C8AB-2A60-4FC9-BA64-77170DF17D6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{51D290F5-65BC-48DC-B129-F3111B3AE311} = {3346D0F4-529C-4053-8E7E-9CBBE6954A4D}
 		{DCC91687-10C2-41A5-80E4-9711D706C124} = {59C157E2-6F03-4A72-AB01-FEBA3B912552}
 		{8AA070F5-6636-4DE4-8D6B-83A6CEEA4E43} = {59C157E2-6F03-4A72-AB01-FEBA3B912552}
 		{7E2F5086-4766-4CD0-961E-0FB8FCDD8D7C} = {59C157E2-6F03-4A72-AB01-FEBA3B912552}
 		{64E7601F-47C6-40FA-BD70-C9A53C8CBF2E} = {4B901647-6271-4313-9340-78442BCDF285}
+		{4738C8AB-2A60-4FC9-BA64-77170DF17D6C} = {3346D0F4-529C-4053-8E7E-9CBBE6954A4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73B9DCB7-A28C-4100-ADDA-935D6FEAB5B2}

@@ -4,14 +4,16 @@ using BlazorFormSample.Data.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorFormSample.Data.Migrations.Migrations
 {
     [DbContext(typeof(CreatureMigrationDbContext))]
-    partial class CreatureMigrationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200927030707_AddMinMaxToAttribute")]
+    partial class AddMinMaxToAttribute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,18 +21,67 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.Creature", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Attribute", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameSystemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("GameSystemId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Maximum")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Minimum")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ModifiedMaximum")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ModifiedMinimum")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameSystemId");
+
+                    b.HasIndex("GameSystemId1");
+
+                    b.ToTable("Attributes");
+                });
+
+            modelBuilder.Entity("BlazorFormSample.Shared.Creature", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("CreatureId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Charisma")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Constitution")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Dexterity")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("GameSystemId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Intelligence")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -41,6 +92,12 @@ namespace BlazorFormSample.Data.Migrations.Migrations
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Strength")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wisdom")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -53,32 +110,7 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("Creatures");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.CreatureAttribute", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("CreatureAttribute")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AttributeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatureId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttributeId");
-
-                    b.HasIndex("CreatureId");
-
-                    b.ToTable("CreatureAttributes");
-                });
-
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.CreatureSkill", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.CreatureSkill", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +135,57 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("CreatureSkills");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.ItemInventory", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.GameSystem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("GameSystemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Publisher")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GameSystems");
+                });
+
+            modelBuilder.Entity("BlazorFormSample.Shared.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameSystemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameSystemId");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("BlazorFormSample.Shared.ItemInventory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -138,98 +220,7 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("InventoryItems");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Attribute", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("AttributeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("GameSystemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("GameSystemId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Maximum")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Minimum")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("ModifiedMaximum")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("ModifiedMinimum")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Order")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameSystemId");
-
-                    b.HasIndex("GameSystemId1");
-
-                    b.ToTable("Attributes");
-                });
-
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.GameSystem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("GameSystemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Publisher")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Version")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GameSystems");
-                });
-
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Item", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("GameSystemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameSystemId");
-
-                    b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Race", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Race", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -255,11 +246,10 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("Races");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.RaceAttributeModifier", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.RaceAttributeModifier", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RaceAttributeModifierId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AttributeId")
@@ -285,11 +275,10 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("RaceAttributeModifiers");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.RaceSkillModifier", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.RaceSkillModifier", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RaceSkillModifierId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Modifier")
@@ -315,7 +304,7 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("RaceSkillModifiers");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Role", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -341,7 +330,7 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Skill", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Skill", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -362,7 +351,7 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("Skills");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.SkillGroup", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.SkillGroup", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -383,179 +372,164 @@ namespace BlazorFormSample.Data.Migrations.Migrations
                     b.ToTable("SkillGroups");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.Creature", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Attribute", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", "GameSystem")
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", null)
                         .WithMany()
                         .HasForeignKey("GameSystemId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Race", "Race")
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
+                        .WithMany("Attributes")
+                        .HasForeignKey("GameSystemId1");
+                });
+
+            modelBuilder.Entity("BlazorFormSample.Shared.Creature", b =>
+                {
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
+                        .WithMany()
+                        .HasForeignKey("GameSystemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("BlazorFormSample.Shared.Race", "Race")
                         .WithMany()
                         .HasForeignKey("RaceId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Role", "Role")
+                    b.HasOne("BlazorFormSample.Shared.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.CreatureAttribute", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.CreatureSkill", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Attribute", "Attribute")
+                    b.HasOne("BlazorFormSample.Shared.Creature", null)
                         .WithMany()
-                        .HasForeignKey("AttributeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("BlazorFormSample.Shared.CreatureModels.Creature", "Creature")
-                        .WithMany("Attributes")
-                        .HasForeignKey("CreatureId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.CreatureSkill", b =>
-                {
-                    b.HasOne("BlazorFormSample.Shared.CreatureModels.Creature", "Creature")
-                        .WithMany("Skills")
                         .HasForeignKey("CreatureId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Skill", "Skill")
+                    b.HasOne("BlazorFormSample.Shared.Skill", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.CreatureModels.ItemInventory", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Item", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.CreatureModels.Creature", null)
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
+                        .WithMany()
+                        .HasForeignKey("GameSystemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BlazorFormSample.Shared.ItemInventory", b =>
+                {
+                    b.HasOne("BlazorFormSample.Shared.Creature", null)
                         .WithMany()
                         .HasForeignKey("CreatureId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("BlazorFormSample.Shared.CreatureModels.Creature", null)
+                    b.HasOne("BlazorFormSample.Shared.Creature", null)
                         .WithMany("InventoryItems")
                         .HasForeignKey("CreatureId1");
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Item", null)
+                    b.HasOne("BlazorFormSample.Shared.Item", null)
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Item", "Item")
+                    b.HasOne("BlazorFormSample.Shared.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Attribute", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Race", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", null)
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", null)
                         .WithMany()
                         .HasForeignKey("GameSystemId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", "GameSystem")
-                        .WithMany("Attributes")
-                        .HasForeignKey("GameSystemId1");
-                });
-
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Item", b =>
-                {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", "GameSystem")
-                        .WithMany()
-                        .HasForeignKey("GameSystemId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Race", b =>
-                {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", null)
-                        .WithMany()
-                        .HasForeignKey("GameSystemId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", "GameSystem")
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
                         .WithMany("Races")
                         .HasForeignKey("GameSystemId1");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.RaceAttributeModifier", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.RaceAttributeModifier", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Attribute", "Attribute")
+                    b.HasOne("BlazorFormSample.Shared.Attribute", "Attribute")
                         .WithMany()
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Race", null)
+                    b.HasOne("BlazorFormSample.Shared.Race", null)
                         .WithMany()
                         .HasForeignKey("RaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Race", null)
+                    b.HasOne("BlazorFormSample.Shared.Race", null)
                         .WithMany("RaceAttributeModifiers")
                         .HasForeignKey("RaceId1");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.RaceSkillModifier", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.RaceSkillModifier", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Race", null)
+                    b.HasOne("BlazorFormSample.Shared.Race", null)
                         .WithMany()
                         .HasForeignKey("RaceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Race", null)
+                    b.HasOne("BlazorFormSample.Shared.Race", null)
                         .WithMany("RaceSkillModifiers")
                         .HasForeignKey("RaceId1");
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.Skill", "Skill")
+                    b.HasOne("BlazorFormSample.Shared.Skill", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Role", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Role", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", null)
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", null)
                         .WithMany()
                         .HasForeignKey("GameSystemId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", "GameSystem")
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
                         .WithMany("Roles")
                         .HasForeignKey("GameSystemId1");
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.Skill", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.Skill", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.SkillGroup", "SkillGroup")
+                    b.HasOne("BlazorFormSample.Shared.SkillGroup", "SkillGroup")
                         .WithMany("Skills")
                         .HasForeignKey("SkillGroupId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorFormSample.Shared.GameModels.SkillGroup", b =>
+            modelBuilder.Entity("BlazorFormSample.Shared.SkillGroup", b =>
                 {
-                    b.HasOne("BlazorFormSample.Shared.GameModels.GameSystem", "GameSystem")
+                    b.HasOne("BlazorFormSample.Shared.GameSystem", "GameSystem")
                         .WithMany("SkillGroups")
                         .HasForeignKey("GameSystemId")
                         .OnDelete(DeleteBehavior.Cascade)

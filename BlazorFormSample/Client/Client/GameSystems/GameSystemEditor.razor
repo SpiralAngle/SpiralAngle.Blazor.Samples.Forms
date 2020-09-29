@@ -1,0 +1,307 @@
+﻿@using BlazorFormSample.Client.SharedComponent
+@using BlazorFormSample.Shared.GameModels
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject IService<BlazorFormSample.Shared.GameModels.GameSystem> GameSystemService
+@inject NavigationManager NavigationManager
+
+@implements System.IDisposable
+@page "/game_system/{GameSystemId}"
+@page "/game_system/new"
+<LoadingIndicator Entity="editModel?.Model">
+    <EditToolbar TEntity="BlazorFormSample.Shared.GameModels.GameSystem" EditModel="editModel"></EditToolbar>
+    <EditForm EditContext="editModel.EditContext">
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="game_name">Name</label>
+            <InputText class="form-control col-2 align-middle" id="game_name" @bind-Value="editModel.Model.Name" @bind-disabled="@readOnly"></InputText>
+        </div>
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="game_publisher">Publisher</label>
+            <InputText class="form-control col-2 align-middle" id="game_publisher" @bind-Value="editModel.Model.Publisher" @bind-disabled="readOnly"></InputText>
+        </div>
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="game_version">Version</label>
+            <InputText class="form-control col-2 align-middle" id="game_version" @bind-Value="editModel.Model.Version" @bind-disabled="readOnly"></InputText>
+        </div>
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="game_description">Description</label>
+            <InputTextArea class="form-control col-4 align-middle" id="game_description" @bind-Value="editModel.Model.Description" @bind-disabled="readOnly"></InputTextArea>
+        </div>
+        <div class="card-group">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Roles</h4>
+                    <div class="btn-toolbar btn-group-sm" role="toolbar">
+                        <button class="btn btn-primary" @onclick="AddRole" aria-label="Add Role" hidden="@(readOnly)" disabled="@(readOnly)" tabindex="0">
+                            <span class="oi oi-plus"></span>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="form-row">
+                            <span class="col-4 form-control-sm">Name</span>
+                            <span class="col-1 form-control-sm"></span>
+                        </div>
+                        @foreach (var item in editModel.Model.Roles)
+                        {
+                            <div class="form-row">
+                                <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
+                                <span class="oi oi-trash col-1" aria-label="Remove Role" @onclick="x => RemoveRole(item)" hidden="@(readOnly)"></span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Races</h4>
+                    <div class="btn-toolbar btn-group-sm" role="toolbar">
+                        <button class="btn btn-primary" @onclick="AddRace" aria-label="Add Race" hidden="@(readOnly)" disabled="@(readOnly)" tabindex="0">
+                            <span class="oi oi-plus"></span>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="form-row">
+                            <span class="col-4 form-control-sm">Name</span>
+                            <span class="col-1 form-control-sm"></span>
+                        </div>
+                        @foreach (var item in editModel.Model.Races)
+                        {
+                            <div class="form-row">
+                                <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
+                                <span class="oi oi-trash col-1" aria-label="Remove Race" @onclick="x => RemoveRace(item)" hidden="@(readOnly)"></span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <PropertyCard EntityList="editModel.Model.Attributes" AddItemDelegate="AddAttribute" EntityName="Attribute" ReadOnly="readOnly">
+                <div class="form-row">
+                    <span class="col-2 form-control-sm align-left">Name</span>
+                    <span class="col-2 form-control-sm align-middle">Modified Min</span>
+                    <span class="col-2 form-control-sm align-middle">Minimum</span>
+                    <span class="col-2 form-control-sm align-middle">Maximum</span>
+                    <span class="col-2 form-control-sm align-middle">Modified Max</span>
+                    <span class="col-1 form-control-sm align-middle">Order</span>
+                    <span class="col-1 form-control-sm"></span>
+                </div>
+                @foreach (var item in editModel.Model.Attributes.OrderBy(x => x.Order))
+                {
+            <div class="form-row">
+                <InputText class="form-control form-control-sm col-2 align-left" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
+                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMinimum" @bind-disabled="readOnly"></InputNumber>
+                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Minimum" @bind-disabled="readOnly"></InputNumber>
+                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Maximum" @bind-disabled="readOnly"></InputNumber>
+                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMaximum" @bind-disabled="readOnly"></InputNumber>
+                <InputNumber class="form-control form-control-sm col-1 align-middle" @bind-Value="item.Order" @bind-disabled="readOnly"></InputNumber>
+                <span class="oi oi-trash col-1" aria-label="Remove Attribute" @onclick="x => RemoveAttribute(item)" hidden="@(readOnly)"></span>
+            </div>
+                }
+            </PropertyCard>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Skill Groups</h4>
+                    <div class="btn-toolbar btn-group-sm" role="toolbar">
+                        <button class="btn btn-primary" @onclick="AddSkillGroup" aria-label="Add Skill Group" hidden="@(readOnly)" disabled="@(readOnly)" tabindex="0">
+                            <span class="oi oi-plus"></span>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="form-row">
+                            <span class="col-4">Name</span>
+                            <span class="col-4"></span>
+                        </div>
+                        @foreach (var skillGroup in editModel.Model.SkillGroups)
+                        {
+                            <div class="row">
+                                <InputText class="form-control form-control-sm col-4 align-middle" @bind-Value="skillGroup.Name" @bind-disabled="readOnly"></InputText>
+                                <div class="col-2">
+                                    <button class="btn btn-primary btn-sm text-nowrap" aria-label="Add Skill to Skill GroupGroup" @onclick="x => AddSkill(skillGroup)" hidden="@(readOnly)" tabindex="0">
+                                        <span class="oi oi-plus"></span><span>Add Skill</span>
+                                    </button>
+                                </div>
+                                <div class="col-2">
+                                    <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill Group" @onclick="x => RemoveSkillGroup(skillGroup)" hidden="@(readOnly)" tabindex="0">
+                                        <span class="oi oi-trash"></span><span>Remove</span>
+                                    </button>
+                                </div>
+                            </div>
+                            @foreach (var skill in skillGroup.Skills)
+                            {
+                                <div class="row">
+                                    <InputText class="form-control form-control-sm col-4 align-middle ml-2 mr-n2" @bind-Value="skill.Name" @bind-disabled="readOnly"></InputText>
+                                    <div class="col-2">
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="btn btn-outline-danger btn-sm text-nowrap" aria-label="Remove Skill" @onclick="x => RemoveSkill(skillGroup, skill)" hidden="@(readOnly)" tabindex="0">
+                                            <span class="oi oi-trash"></span><span>Remove</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </EditForm>
+</LoadingIndicator>
+@code {
+    [Parameter]
+    public string GameSystemId { get; set; }
+
+    EditModel<GameSystem> editModel;
+    private bool _readOnly = true;
+    private bool readOnly
+    {
+        get
+        {
+            return _readOnly;
+        }
+        set
+        {
+            _readOnly = value;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+    private bool WasFromNew;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        readOnly = true;
+        WasFromNew = new Uri(NavigationManager.Uri).Segments.Last() == "new";
+        // await InitializeEditorAsync();
+        editModel = new EditModel<GameSystem>(GameSystemService);
+        editModel.ModelDeleted += ModelDeleted;
+        editModel.ModelSaved += ModelSaved;
+        editModel.EditCanceled += EditCanceled;
+        editModel.EditStarted += EditStarted;
+        await editModel.InitializeEditorAsync(WasFromNew ? default : new Guid(GameSystemId));
+        readOnly = !WasFromNew;
+    }
+
+    private void AddAttribute()
+    {
+        var last = editModel.Model.Attributes.LastOrDefault();
+        var maxOrder = last == null ? 0 : editModel.Model.Attributes.Max(x => x.Order);
+        editModel.Model.Attributes.Add(last == null ? new BlazorFormSample.Shared.GameModels.Attribute() : new BlazorFormSample.Shared.GameModels.Attribute
+        {
+            ModifiedMinimum = last.ModifiedMinimum,
+            Minimum = last.Minimum,
+            Maximum = last.Maximum,
+            ModifiedMaximum = last.ModifiedMaximum,
+            Order= maxOrder + 1
+        });
+    }
+
+    private void AddRole()
+    {
+        editModel.Model.Roles.Add(new Role());
+    }
+
+    private void AddRace()
+    {
+        editModel.Model.Races.Add(new Race());
+    }
+
+    private void AddSkillGroup()
+    {
+        editModel.Model.SkillGroups.Add(new SkillGroup());
+    }
+
+    private void AddSkill(SkillGroup group)
+    {
+        group.Skills.Add(new Skill());
+    }
+
+    private void RemoveAttribute(BlazorFormSample.Shared.GameModels.Attribute attribute)
+    {
+        if (editModel.Model.Attributes.Remove(attribute))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "Attributes"));
+        }
+    }
+
+    private void RemoveRace(Race race)
+    {
+        if (editModel.Model.Races.Remove(race))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "Races"));
+        }
+    }
+
+    private void RemoveRole(Role role)
+    {
+        if (editModel.Model.Roles.Remove(role))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "Roles"));
+        }
+    }
+
+    private void RemoveSkillGroup(SkillGroup skillGroup)
+    {
+        if (editModel.Model.SkillGroups.Remove(skillGroup))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(editModel.Model, "SkillGroups"));
+        }
+    }
+
+    private void RemoveSkill(SkillGroup skillGroup, Skill skill)
+    {
+        if (skillGroup.Skills.Remove(skill))
+        {
+            editModel.EditContext.NotifyFieldChanged(new FieldIdentifier(skillGroup, "Skills"));
+        }
+    }
+
+    private void ModelSaved(GameSystem system)
+    {
+        readOnly = true;
+        if (WasFromNew)
+        {
+            NavigationManager.NavigateTo($"game_system/{editModel.Model.Id}");
+        }
+    }
+
+    private void ModelDeleted(GameSystem system)
+    {
+        readOnly = true;
+        NavigationManager.NavigateTo("/game_system");
+    }
+
+    private void EditCanceled(GameSystem system)
+    {
+        readOnly = true;
+        if (WasFromNew)
+        {
+            NavigationManager.NavigateTo("/game_system");
+        }
+    }
+
+    private void EditStarted(GameSystem system)
+    {
+        readOnly = false;
+    }
+
+    public void Dispose()
+    {
+        if (editModel != null)
+        {
+            editModel.ModelDeleted -= ModelDeleted;
+            editModel.ModelSaved -= ModelSaved;
+            editModel.EditCanceled -= EditCanceled;
+            editModel.EditStarted -= EditStarted;
+            editModel.Dispose();
+        }
+    }
+}

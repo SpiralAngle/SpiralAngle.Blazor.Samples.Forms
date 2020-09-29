@@ -1,4 +1,5 @@
-﻿using BlazorFormSample.Shared;
+﻿using BlazorFormSample.Shared.CreatureModels;
+using BlazorFormSample.Shared.GameModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -10,6 +11,7 @@ namespace BlazorFormSample.Server.Data
         public DbSet<ItemInventory> InventoryItems { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<CreatureSkill> CreatureSkills { get; set; }
+        public DbSet<CreatureAttribute> CreatureAttributes { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<SkillGroup> SkillGroups { get; set; }
         public DbSet<Attribute> Attributes{ get; set; }
@@ -82,12 +84,24 @@ namespace BlazorFormSample.Server.Data
                      .HasForeignKey(c => c.SkillId)
                      .OnDelete(DeleteBehavior.NoAction);
 
-                entity.HasOne<Creature>()
-                     .WithMany()
+                entity.HasOne(c => c.Creature)
+                     .WithMany(c => c.Skills)
                      .HasForeignKey(c => c.CreatureId)
                      .OnDelete(DeleteBehavior.NoAction);
             });
 
+
+            modelBuilder.Entity<CreatureAttribute>(entity =>
+            {
+                entity.HasOne(c => c.Attribute)
+                     .WithMany()
+                     .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(c=> c.Creature)
+                     .WithMany(c => c.Attributes)
+                     .HasForeignKey(c => c.CreatureId)
+                     .OnDelete(DeleteBehavior.NoAction);
+            });
 
             modelBuilder.Entity<Attribute>(b =>
             {

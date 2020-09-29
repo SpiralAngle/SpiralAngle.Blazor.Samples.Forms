@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using BlazorFormSample.Client.GameSystem;
+using BlazorFormSample.Client.GameSystems;
 using BlazorFormSample.Client.SharedComponent;
 using Models = BlazorFormSample.Shared;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-
+using BlazorFormSample.Client.Creatures;
 
 namespace BlazorFormSample.Client
 {
@@ -39,7 +39,8 @@ namespace BlazorFormSample.Client
                 options.ProviderOptions.DefaultAccessTokenScopes.Add(scope);
             });
 
-            builder.Services.AddScoped<IService<Models.GameSystem>, GameSystemService>();
+            builder.Services.AddScoped<IService<Models.GameModels.GameSystem>, GameSystemService>();
+            builder.Services.AddScoped<IService<Models.CreatureModels.Creature>, CreatureService>();
             await builder.Build().RunAsync();
         }
 

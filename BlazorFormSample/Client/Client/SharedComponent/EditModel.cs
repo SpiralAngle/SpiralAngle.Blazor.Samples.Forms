@@ -42,13 +42,12 @@ namespace BlazorFormSample.Client.SharedComponent
             }
         }
 
-        private NavigationManager _navigationManager { get; }
-
-        public event Action ModelDeleted;
-        public event Action ModelSaved;
-        public event Action EditCanceled;
-        public event Action DeleteCanceled;
-        public event Action EditStarted;
+        public event Action<TEntity> OnModelSet;
+        public event Action<TEntity> ModelDeleted;
+        public event Action<TEntity> ModelSaved;
+        public event Action<TEntity> EditCanceled;
+        public event Action<TEntity> DeleteCanceled;
+        public event Action<TEntity> EditStarted;
 
         public EditModel(IService<TEntity> service)
         {
@@ -75,6 +74,7 @@ namespace BlazorFormSample.Client.SharedComponent
             }
             EditContext = new EditContext(Model);
             EditContext.OnFieldChanged += FieldChanged;
+            OnModelSet?.Invoke(Model);
         }
 
         private void FieldChanged(object sender, FieldChangedEventArgs e)
@@ -88,12 +88,12 @@ namespace BlazorFormSample.Client.SharedComponent
             {                
                 await InitializeEditorAsync(Model.Id);
             }
-            EditCanceled?.Invoke();
+            EditCanceled?.Invoke(Model);
         }
 
         public void CancelDelete()
         {
-            DeleteCanceled?.Invoke();
+            DeleteCanceled?.Invoke(Model);
             ConfirmDelete = false;
         }
 
@@ -107,7 +107,7 @@ namespace BlazorFormSample.Client.SharedComponent
             if (!WasFromNew && ConfirmDelete)
             {
                 await Service.DeleteItemAsync(Model);
-                ModelDeleted?.Invoke();
+                ModelDeleted?.Invoke(Model);
             }
             ConfirmDelete = false;
         }
@@ -127,12 +127,12 @@ namespace BlazorFormSample.Client.SharedComponent
                 id = Model.Id;
             }
             await InitializeEditorAsync(id);
-            ModelSaved?.Invoke();
+            ModelSaved?.Invoke(Model);
         }
 
         public void StartEdit()
         {
-            EditStarted?.Invoke();
+            EditStarted?.Invoke(Model);
             ReadOnly = false;            
         }
 

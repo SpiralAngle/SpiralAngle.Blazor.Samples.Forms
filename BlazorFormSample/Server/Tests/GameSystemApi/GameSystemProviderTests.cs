@@ -2,7 +2,7 @@ using BlazorFormSample.Server.Data;
 using BlazorFormSample.Server.GameSystemApi;
 using BlazorFormSample.Server.Shared;
 using BlazorFormSample.Server.Tests.Utility;
-using BlazorFormSample.Shared;
+using BlazorFormSample.Shared.GameModels;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -16,12 +16,15 @@ using Xunit;
 
 namespace BlazorFormSample.Server.Tests.GameSystemApi
 {
-    public class GameSystemProviderTests : IClassFixture<CreatureDbContextFixture>
-    {       
+    [Collection("ProviderTests")]
+    public class GameSystemProviderTests
+    {
 
         public CreatureDbContextFixture Fixture { get; }
 
         public GameSystemProviderTests(CreatureDbContextFixture fixture) => Fixture = fixture;
+
+        // public GameSystemProviderTests() => Fixture = new CreatureDbContextFixture();
 
         [Fact]
         public async Task Add_Adds()
@@ -30,21 +33,27 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
             {
                 using (var context = Fixture.CreateContext(transaction))
                 {
+                    const string expectedRace = "ra1";
+                    const string expectedRole = "ro1";
+                    const string expectedSkillGroup = "sg1";
+                    const string expectedSkill = "sk1";
+
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
+
                     GameSystem system = new GameSystem
                     {
                         Name = "Name",
                         Version = "Version",
-                        Roles = new List<Role> { new Role { Name = "ro1" } },
-                        Races = new List<Race> { new Race { Name = "ra1" } },
+                        Roles = new List<Role> { new Role { Name = expectedRole } },
+                        Races = new List<Race> { new Race { Name = expectedRace } },
                         SkillGroups = new List<SkillGroup>
                         {
                             new SkillGroup
                             {
-                                Name = "sg1",
+                                Name = expectedSkillGroup,
                                 Skills = new List<Skill>
                                 {
-                                    new Skill { Name= "sk1" }
+                                    new Skill { Name= expectedSkill }
                                 }
                             }
                         }
@@ -55,6 +64,10 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
                     var retrievedSystem = await entityProvider.GetAsync(savedSystem);
 
                     Assert.NotNull(retrievedSystem);
+                    Assert.True(retrievedSystem.Roles.Count == 1);
+                    Assert.Equal(expectedRole, retrievedSystem.Roles.FirstOrDefault()?.Name);
+                    Assert.Equal(expectedRace, retrievedSystem.Races.FirstOrDefault()?.Name);
+                    Assert.Equal(expectedSkill, retrievedSystem.SkillGroups.FirstOrDefault(x => x.Name == expectedSkillGroup).Skills.FirstOrDefault().Name);
                 }
                 await transaction.RollbackAsync();
             }
@@ -69,9 +82,27 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
                 {
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
 
-                    var system = await entityProvider.GetAsync(new Guid("10000000-0000-0000-0000-000000000000"));
+                    var system = await entityProvider.GetAsync(CreatureDbContextFixture.GameSystemId);
 
                     Assert.True(system.SkillGroups.FirstOrDefault()?.Skills.FirstOrDefault()?.Name == "sk1");
+                }
+            }
+        }
+
+        [Fact]
+        public async Task GetList_Gets()
+        {
+            using (var transaction = Fixture.Connection.BeginTransaction())
+            {
+                using (var context = Fixture.CreateContext(transaction))
+                {
+                    IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
+
+                    var systems = await entityProvider.GetListAsync();
+
+                    Assert.False(systems.First().SkillGroups.Any());
+                    Assert.True(systems.First().Name == "Name1");
+                    Assert.True(systems.First().Version == "Version1");
                 }
             }
         }
@@ -80,21 +111,41 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
         public async Task Update_Updates()
         {
             const string newRoleName = "ro2";
+            const string newSkillName = "sk15";
+            const string skillGroup2Name = "sg2";
+            const string skill2Name = "sk2";
 
+            Guid gameSystemId = new Guid("10000000-0000-0000-0000-000000000000");
             using (var transaction = Fixture.Connection.BeginTransaction())
             {
                 using (var context = Fixture.CreateContext(transaction))
                 {
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
 
-                    var system = await entityProvider.GetAsync(new Guid("10000000-0000-0000-0000-000000000000"));
+
+                    var system = await entityProvider.GetAsync(gameSystemId);
 
                     system.Roles.Remove(system.Roles.First());
-                    system.Roles.Add(new Role { Name = newRoleName });                   
+                    system.Roles.Add(new Role { Name = newRoleName });
 
-                    Assert.True(system.Roles.Count == 1);
-                    Assert.True(system.Roles.FirstOrDefault()?.Name == newRoleName);
 
+                    system.SkillGroups.FirstOrDefault().Skills.FirstOrDefault().Name = newSkillName;
+                    system.SkillGroups.Add(new SkillGroup
+                    {
+                        Name = skillGroup2Name,
+                        Skills = new List<Skill>
+                        {
+                            new Skill { Name = skill2Name }
+                        }
+                    });
+
+                    await entityProvider.UpdateAsync(system);
+
+                    var retrievedSystem = await entityProvider.GetAsync(new Guid("10000000-0000-0000-0000-000000000000"));
+                    Assert.True(retrievedSystem.Roles.Count == 1);
+                    Assert.Equal(newRoleName, retrievedSystem.Roles.FirstOrDefault()?.Name);
+                    Assert.Equal(newSkillName, retrievedSystem.SkillGroups.FirstOrDefault(x => x.Name == "sg1").Skills.FirstOrDefault().Name);
+                    Assert.Equal(skill2Name, retrievedSystem.SkillGroups.FirstOrDefault(x => x.Name == skillGroup2Name).Skills.FirstOrDefault().Name);
                 }
             }
         }
@@ -108,7 +159,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
                 {
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
                     Guid id = new Guid("10000000-0000-0000-0000-000000000000");
-                    var result =  await entityProvider.DeleteAsync(id);
+                    var result = await entityProvider.DeleteAsync(id);
 
                     var retrievedSystem = await entityProvider.GetAsync(id);
 
@@ -117,7 +168,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
                 }
                 await transaction.RollbackAsync();
             }
-        }
+        }        
     }
 
 }

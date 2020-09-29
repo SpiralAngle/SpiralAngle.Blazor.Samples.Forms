@@ -1,0 +1,44 @@
+﻿@using BlazorFormSample.Shared
+@using BlazorFormSample.Client.SharedComponent
+@using SpiralAngle.Blazor.Extensions.Forms
+@using Microsoft.AspNetCore.Authorization
+@using BlazorFormSample.Shared.CreatureModels
+@attribute [Authorize]
+@inherits EntityListBase<Creature>
+@page "/creature"
+<h3><NavLink href="#" Match="NavLinkMatch.Prefix">Creature List</NavLink></h3>
+<LoadingIndicator Entity="Entities">
+    <div class="btn-toolbar" role="toolbar">
+        <NavLink class="btn btn-primary" href="/creature/new" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Add Creature"><span class="oi oi-plus"></span>&nbsp;Add</NavLink>
+    </div>
+    <div class="card-group">
+        @foreach (var creature in Entities)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        <NavLink href="@GetEntityLink(creature)" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Go to Creature"><span>@creature.Name</span></NavLink>
+                    </h5>
+                    <div class="card-subtitle">
+                        <span>@creature.Race?.Name</span><span>@creature.Role?.Name</span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="creature-description-truncated">@creature.Description</div>
+                </div>
+                <div class="card-footer">
+                    <NavLink class="nav-link" href="@GetEntityLink(creature)" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Go to Creature"><span class="oi oi-magnifying-glass"></span>&nbsp;Details</NavLink>
+                </div>
+            </div>
+        }
+    </div>
+</LoadingIndicator>
+
+@code {
+
+    protected override string GetEntityLink(Creature creature)
+    {
+        return $"creature/{creature.Id}";
+    }
+}
