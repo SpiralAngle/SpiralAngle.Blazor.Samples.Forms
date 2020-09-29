@@ -210,10 +210,15 @@ app > .footer {
             filter: brightness(150%);
         }
 
-.form-control:disabled, .form-control-sm:disabled, .form-control-lg:disabled {
-    border-color: white;
-    background: none;
+.form-control, .form-control-sm, .form-control-lg{
+    border-style:solid;
 }
+
+    .form-control:disabled, .form-control-sm:disabled, .form-control-lg:disabled {
+        border-color: white;
+        background: none;
+        border-style: solid;
+    }
 
 .form-row .grid-head > span {
     font-size:0.5em

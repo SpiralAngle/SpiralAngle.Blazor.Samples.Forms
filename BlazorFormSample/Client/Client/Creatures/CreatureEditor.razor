@@ -32,7 +32,7 @@
         <div class="form-row">
 
             @if (SelectedGameSystem != null)
-            { 
+            {
                 <label class="col-1 align-middle form-label-sm" label-for="race">Race</label>
                 <InputFlexSelect class="form-control-sm col-2 align-middle" id="race" @bind-Value="EditModel.Model.RaceId" @bind-disabled="ReadOnly">
                     <option value=""></option>
@@ -60,32 +60,15 @@
             }
         </div>
 
-        @*<fieldset>
+        <fieldset>
+            @foreach (var attr in EditModel.Model.Attributes)
+            {
                 <div class="form-row">
-                    <label class="col-1 align-middle col-form-label-sm" label-for="strength">Strength</label>
-                    <InputNumber class="form-control col-2 align-middle" id="strength" @bind-Value="EditModel.Model.Strength" @bind-disabled="ReadOnly"></InputNumber>
+                    <label class="col-1 align-middle col-form-label-sm" label-for="@attr.Attribute.Name">@attr.Attribute.Name</label>
+                    <InputNumber class="form-control col-2 align-middle" id="@attr.Attribute.Name" @bind-Value="attr.Value" @bind-disabled="ReadOnly" min="@(attr.Attribute.Minimum.ToString())" max="@(attr.Attribute.Maximum.ToString())"></InputNumber>
                 </div>
-                <div class="form-row">
-                    <label class="col-1 align-middle col-form-label-sm" label-for="dexterity">Dexterity</label>
-                    <InputNumber class="form-control col-2 align-middle" id="dexterity" @bind-Value="EditModel.Model.Dexterity" @bind-disabled="ReadOnly"></InputNumber>
-                </div>
-                <div class="form-row">
-                    <label class="col-1 align-middle col-form-label-sm" label-for="constitution">Constitution</label>
-                    <InputNumber class="form-control col-2 align-middle" id="constitution" @bind-Value="EditModel.Model.Constitution" @bind-disabled="ReadOnly"></InputNumber>
-                </div>
-                <div class="form-row">
-                    <label class="col-1 align-middle align-middle col-form-label-sm" label-for="intelligence">Intelligence</label>
-                    <InputNumber class="form-control col-2 align-middle" id="intelligence" @bind-Value="EditModel.Model.Intelligence" @bind-disabled="ReadOnly"></InputNumber>
-                </div>
-                <div class="form-row">
-                    <label class="col-1 align-middle col-form-label-sm" label-for="wisdom">Wisdom</label>
-                    <InputNumber class="form-control col-2 align-middle" id="wisdom" @bind-Value="EditModel.Model.Wisdom" @bind-disabled="ReadOnly"></InputNumber>
-                </div>
-                <div class="form-row">
-                    <label class="col-1 align-middle col-form-label-sm" label-for="charisma">Charisma</label>
-                    <InputNumber class="form-control col-2 align-middle" id="charisma" @bind-Value="EditModel.Model.Charisma" @bind-disabled="ReadOnly"></InputNumber>
-                </div>
-            </fieldset>*@
+            }
+        </fieldset>
 
         <div class="card-columns">
             <div class="card">
@@ -158,11 +141,22 @@
         await InvokeAsync(StateHasChanged);
     }
 
+    private async Task ResetGameSystem()
+    {
+        await SetModelAsync();
+        EditModel.Model.Attributes.Clear();
+        foreach (var attr in SelectedGameSystem.Attributes)
+        {
+            EditModel.Model.Attributes.Add(new CreatureAttribute { Attribute = attr, AttributeId = attr.Id, CreatureId = EditModel.Model.Id });
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
     public void FieldChanged(object e, FieldChangedEventArgs args)
     {
         if (args.FieldIdentifier.FieldName == "GameSystemId")
         {
-            InvokeAsync(SetModelAsync);
+            InvokeAsync(ResetGameSystem);
         }
     }
 

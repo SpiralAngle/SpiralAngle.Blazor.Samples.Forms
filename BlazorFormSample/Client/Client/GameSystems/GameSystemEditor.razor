@@ -193,7 +193,7 @@
     private void AddAttribute()
     {
         var last = editModel.Model.Attributes.LastOrDefault();
-        var maxOrder = editModel.Model.Attributes.Max(x => x.Order);
+        var maxOrder = last == null ? 0 : editModel.Model.Attributes.Max(x => x.Order);
         editModel.Model.Attributes.Add(last == null ? new BlazorFormSample.Shared.GameModels.Attribute() : new BlazorFormSample.Shared.GameModels.Attribute
         {
             ModifiedMinimum = last.ModifiedMinimum,
