@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BlazorFormSample.Shared.CreatureModels
@@ -8,6 +9,7 @@ namespace BlazorFormSample.Shared.CreatureModels
     public class CreatureAttribute : IEntity
     {
         [Key]
+        [Column("CreatureAttribute")]
         public Guid Id { get; set; }
 
         [Required]

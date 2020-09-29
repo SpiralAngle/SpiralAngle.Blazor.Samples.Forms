@@ -419,3 +419,146 @@ BEGIN
 END;
 
 GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    DECLARE @var0 sysname;
+    SELECT @var0 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Creatures]') AND [c].[name] = N'Charisma');
+    IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [Creatures] DROP CONSTRAINT [' + @var0 + '];');
+    ALTER TABLE [Creatures] DROP COLUMN [Charisma];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    DECLARE @var1 sysname;
+    SELECT @var1 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Creatures]') AND [c].[name] = N'Constitution');
+    IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Creatures] DROP CONSTRAINT [' + @var1 + '];');
+    ALTER TABLE [Creatures] DROP COLUMN [Constitution];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    DECLARE @var2 sysname;
+    SELECT @var2 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Creatures]') AND [c].[name] = N'Dexterity');
+    IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Creatures] DROP CONSTRAINT [' + @var2 + '];');
+    ALTER TABLE [Creatures] DROP COLUMN [Dexterity];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    DECLARE @var3 sysname;
+    SELECT @var3 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Creatures]') AND [c].[name] = N'Intelligence');
+    IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [Creatures] DROP CONSTRAINT [' + @var3 + '];');
+    ALTER TABLE [Creatures] DROP COLUMN [Intelligence];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    DECLARE @var4 sysname;
+    SELECT @var4 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Creatures]') AND [c].[name] = N'Strength');
+    IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [Creatures] DROP CONSTRAINT [' + @var4 + '];');
+    ALTER TABLE [Creatures] DROP COLUMN [Strength];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    DECLARE @var5 sysname;
+    SELECT @var5 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Creatures]') AND [c].[name] = N'Wisdom');
+    IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [Creatures] DROP CONSTRAINT [' + @var5 + '];');
+    ALTER TABLE [Creatures] DROP COLUMN [Wisdom];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    EXEC sp_rename N'[RaceSkillModifiers].[Id]', N'RaceSkillModifierId', N'COLUMN';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    EXEC sp_rename N'[RaceAttributeModifiers].[Id]', N'RaceAttributeModifierId', N'COLUMN';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    EXEC sp_rename N'[Attributes].[Id]', N'AttributeId', N'COLUMN';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    ALTER TABLE [Attributes] ADD [Order] decimal(18,2) NOT NULL DEFAULT 0.0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    CREATE TABLE [CreatureAttributes] (
+        [CreatureAttribute] uniqueidentifier NOT NULL,
+        [CreatureId] uniqueidentifier NOT NULL,
+        [AttributeId] uniqueidentifier NOT NULL,
+        [Value] decimal(18,2) NOT NULL,
+        CONSTRAINT [PK_CreatureAttributes] PRIMARY KEY ([CreatureAttribute]),
+        CONSTRAINT [FK_CreatureAttributes_Attributes_AttributeId] FOREIGN KEY ([AttributeId]) REFERENCES [Attributes] ([AttributeId]),
+        CONSTRAINT [FK_CreatureAttributes_Creatures_CreatureId] FOREIGN KEY ([CreatureId]) REFERENCES [Creatures] ([CreatureId])
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    CREATE INDEX [IX_CreatureAttributes_AttributeId] ON [CreatureAttributes] ([AttributeId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    CREATE INDEX [IX_CreatureAttributes_CreatureId] ON [CreatureAttributes] ([CreatureId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200927220321_AddCreatureAttributes')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200927220321_AddCreatureAttributes', N'3.1.8');
+END;
+
+GO

@@ -28,11 +28,12 @@ namespace BlazorFormSample.Client.SharedComponent
 
         bool HideDelete { get; }
 
-        event Action ModelDeleted;
-        event Action ModelSaved;
-        event Action EditCanceled;
-        event Action DeleteCanceled;
-        event Action EditStarted;
+        event Action<TEntity> OnModelSet;
+        event Action<TEntity> ModelDeleted;
+        event Action<TEntity> ModelSaved;
+        event Action<TEntity> EditCanceled;
+        event Action<TEntity> DeleteCanceled;
+        event Action<TEntity> EditStarted;
 
         Task InitializeEditorAsync(Guid id);
 

@@ -1,0 +1,177 @@
+﻿@using BlazorFormSample.Shared.CreatureModels
+@using BlazorFormSample.Shared.GameModels
+@using BlazorFormSample.Client.SharedComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@page "/creature/{EntityId}"
+@page "/creature/new"
+@implements System.IDisposable
+@inject IService<GameSystem> GameSystemService
+@inherits BlazorFormSample.Client.SharedComponent.EntityEditorBase<Creature>
+
+<LoadingIndicator Entity="EditModel">
+    <EditToolbar TEntity="BlazorFormSample.Shared.CreatureModels.Creature" EditModel="EditModel"></EditToolbar>
+    <EditForm EditContext="EditModel.EditContext">
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="gamesystem">Game System</label>
+            <InputFlexSelect class="form-control-sm col-2 align-middle" id="gamesystem" @bind-Value="EditModel.Model.GameSystemId" @bind-disabled="ReadOnly">
+                <option value=""></option>
+                @if (GameSystems != null)
+                {
+                    @foreach (var gameSystem in GameSystems)
+                    {
+                        <option value="@gameSystem.Id">@($"{gameSystem.Name} ({gameSystem.Version})")</option>
+                    }
+                }
+            </InputFlexSelect>
+        </div>
+        <div class="form-row">
+            <label class="col-1 align-middle form-label-sm" label-for="name">Name</label>
+            <InputText class="form-control-lg col-2 align-middle" id="name" @bind-Value="EditModel.Model.Name" @bind-disabled="ReadOnly"></InputText>
+        </div>
+        <div class="form-row">
+
+            @if (SelectedGameSystem != null)
+            { 
+                <label class="col-1 align-middle form-label-sm" label-for="race">Race</label>
+                <InputFlexSelect class="form-control-sm col-2 align-middle" id="race" @bind-Value="EditModel.Model.RaceId" @bind-disabled="ReadOnly">
+                    <option value=""></option>
+
+                    @foreach (var race in SelectedGameSystem.Races)
+                    {
+                        <option value="@race.Id">@race.Name</option>
+                    }
+
+                </InputFlexSelect>
+                <label class="col-1 align-middle form-label-sm" label-for="role">Role</label>
+                <InputFlexSelect class="form-control-sm col-2 align-middle" id="role" @bind-Value="EditModel.Model.RoleId" @bind-disabled="ReadOnly">
+                    <option value=""></option>
+
+                    @foreach (var role in SelectedGameSystem.Roles)
+                    {
+                        <option value="@role.Id">@role.Name</option>
+                    }
+
+                </InputFlexSelect>
+            }
+            else
+            {
+                <div class="col-3 font-italic">Select a Game System</div>
+            }
+        </div>
+
+        @*<fieldset>
+                <div class="form-row">
+                    <label class="col-1 align-middle col-form-label-sm" label-for="strength">Strength</label>
+                    <InputNumber class="form-control col-2 align-middle" id="strength" @bind-Value="EditModel.Model.Strength" @bind-disabled="ReadOnly"></InputNumber>
+                </div>
+                <div class="form-row">
+                    <label class="col-1 align-middle col-form-label-sm" label-for="dexterity">Dexterity</label>
+                    <InputNumber class="form-control col-2 align-middle" id="dexterity" @bind-Value="EditModel.Model.Dexterity" @bind-disabled="ReadOnly"></InputNumber>
+                </div>
+                <div class="form-row">
+                    <label class="col-1 align-middle col-form-label-sm" label-for="constitution">Constitution</label>
+                    <InputNumber class="form-control col-2 align-middle" id="constitution" @bind-Value="EditModel.Model.Constitution" @bind-disabled="ReadOnly"></InputNumber>
+                </div>
+                <div class="form-row">
+                    <label class="col-1 align-middle align-middle col-form-label-sm" label-for="intelligence">Intelligence</label>
+                    <InputNumber class="form-control col-2 align-middle" id="intelligence" @bind-Value="EditModel.Model.Intelligence" @bind-disabled="ReadOnly"></InputNumber>
+                </div>
+                <div class="form-row">
+                    <label class="col-1 align-middle col-form-label-sm" label-for="wisdom">Wisdom</label>
+                    <InputNumber class="form-control col-2 align-middle" id="wisdom" @bind-Value="EditModel.Model.Wisdom" @bind-disabled="ReadOnly"></InputNumber>
+                </div>
+                <div class="form-row">
+                    <label class="col-1 align-middle col-form-label-sm" label-for="charisma">Charisma</label>
+                    <InputNumber class="form-control col-2 align-middle" id="charisma" @bind-Value="EditModel.Model.Charisma" @bind-disabled="ReadOnly"></InputNumber>
+                </div>
+            </fieldset>*@
+
+        <div class="card-columns">
+            <div class="card">
+                <label class="align-middle form-label" label-for="Description">Description</label>
+                <InputTextArea class="form-control" id="description" @bind-Value="EditModel.Model.Description" @bind-disabled="ReadOnly"></InputTextArea>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="form-row">
+                            <span class="col-3">Name</span>
+                            <span class="col-3">Item Weight</span>
+                            <span class="col-3">Quantity</span>
+                            <span class="col-3">Total Weight</span>
+                        </div>
+                        @foreach (var item in EditModel.Model.InventoryItems)
+                        {
+                            <div class="form-row">
+                                <InputText class="form-control-sm col-3 align-middle" @bind-Value="item.Item.Name" @bind-disabled="ReadOnly"></InputText>
+                                <InputNumber class="form-control-sm col-3 align-middle" @bind-Value="item.Item.Weight" @bind-disabled="ReadOnly"></InputNumber>
+                                <InputNumber class="form-control-sm col-3 align-middle" @bind-Value="item.Quantity" @bind-disabled="ReadOnly"></InputNumber>
+                                <input type="number" class="form-control-sm col-3 align-middle float-right" disabled value="@item.Weight" />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer"><span class="oi oi-plus" aria-label="Add Item" @onclick="AddItem" hidden="@(ReadOnly)"></span></div>
+            </div>
+        </div>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </EditForm>
+</LoadingIndicator>
+
+@code {
+
+    public override string BaseUri => "/creature";
+    IEnumerable<GameSystem> GameSystems { get; set; }
+    protected GameSystem SelectedGameSystem { get; private set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        GameSystems = await GameSystemService.GetListAsync();
+        await base.OnParametersSetAsync();
+        EditModel.OnModelSet += ModelSet;
+        await SetModelAsync();
+        EditModel.EditContext.OnFieldChanged += FieldChanged;
+    }
+
+    private void AddItem()
+    {
+        EditModel.Model.InventoryItems.Add(new ItemInventory { Id = Guid.NewGuid(), Item = new Item { Id = Guid.NewGuid() } });
+    }
+
+    private void ModelSet(Creature model)
+    {
+        InvokeAsync(SetModelAsync);
+    }
+
+    private async Task SetModelAsync()
+    {
+        if (EditModel?.Model != null && EditModel?.Model.GameSystemId != default(Guid))
+        {
+            SelectedGameSystem = await GameSystemService.GetAsync(EditModel.Model.GameSystemId);
+        }
+        else
+        {
+            SelectedGameSystem = null;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void FieldChanged(object e, FieldChangedEventArgs args)
+    {
+        if (args.FieldIdentifier.FieldName == "GameSystemId")
+        {
+            InvokeAsync(SetModelAsync);
+        }
+    }
+
+    public override void Dispose()
+    {
+        if (EditModel?.EditContext != null)
+        {
+            EditModel.EditContext.OnFieldChanged -= FieldChanged;
+        }
+        base.Dispose();
+    }
+}

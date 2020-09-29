@@ -15,6 +15,9 @@ namespace BlazorFormSample.Shared.CreatureModels
         public Guid CreatureId { get; set; }
 
         [Required]
+        public Creature Creature { get; set; }
+
+        [Required]
         public Skill Skill { get; set; }
 
         [Required]

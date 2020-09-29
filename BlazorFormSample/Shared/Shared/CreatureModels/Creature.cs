@@ -32,10 +32,8 @@ namespace BlazorFormSample.Shared.CreatureModels
         [Required]
         public Guid RoleId { get; set; }
 
-        [Required]
         public IList<CreatureAttribute> Attributes { get; set; }
 
-        [Required]
         public IList<CreatureSkill> Skills { get; set; }
 
         public string Description { get; set; }

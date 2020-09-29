@@ -16,12 +16,15 @@ using Xunit;
 
 namespace BlazorFormSample.Server.Tests.GameSystemApi
 {
-    public class GameSystemProviderTests : IClassFixture<CreatureDbContextFixture>
+    [Collection("ProviderTests")]
+    public class GameSystemProviderTests
     {
 
         public CreatureDbContextFixture Fixture { get; }
 
         public GameSystemProviderTests(CreatureDbContextFixture fixture) => Fixture = fixture;
+
+        // public GameSystemProviderTests() => Fixture = new CreatureDbContextFixture();
 
         [Fact]
         public async Task Add_Adds()
@@ -30,7 +33,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
             {
                 using (var context = Fixture.CreateContext(transaction))
                 {
-                    const string expectedRace = "ra1"; 
+                    const string expectedRace = "ra1";
                     const string expectedRole = "ro1";
                     const string expectedSkillGroup = "sg1";
                     const string expectedSkill = "sk1";
@@ -62,7 +65,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
 
                     Assert.NotNull(retrievedSystem);
                     Assert.True(retrievedSystem.Roles.Count == 1);
-                    Assert.Equal(expectedRole, retrievedSystem.Roles.FirstOrDefault()?.Name);                    
+                    Assert.Equal(expectedRole, retrievedSystem.Roles.FirstOrDefault()?.Name);
                     Assert.Equal(expectedRace, retrievedSystem.Races.FirstOrDefault()?.Name);
                     Assert.Equal(expectedSkill, retrievedSystem.SkillGroups.FirstOrDefault(x => x.Name == expectedSkillGroup).Skills.FirstOrDefault().Name);
                 }
@@ -79,7 +82,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
                 {
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
 
-                    var system = await entityProvider.GetAsync(new Guid("10000000-0000-0000-0000-000000000000"));
+                    var system = await entityProvider.GetAsync(CreatureDbContextFixture.GameSystemId);
 
                     Assert.True(system.SkillGroups.FirstOrDefault()?.Skills.FirstOrDefault()?.Name == "sk1");
                 }
@@ -165,7 +168,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
                 }
                 await transaction.RollbackAsync();
             }
-        }
+        }        
     }
 
 }

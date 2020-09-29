@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorFormSample.Shared.GameModels
 {
     public class RaceSkillModifier : IEntity
     {
         [Key]
+        [Column("RaceSkillModifierId")]
         public Guid Id { get; set; }
 
         public Skill Skill { get; set; }

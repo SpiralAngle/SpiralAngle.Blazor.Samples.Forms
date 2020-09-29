@@ -84,8 +84,8 @@ namespace BlazorFormSample.Server.Data
                      .HasForeignKey(c => c.SkillId)
                      .OnDelete(DeleteBehavior.NoAction);
 
-                entity.HasOne<Creature>()
-                     .WithMany()
+                entity.HasOne(c => c.Creature)
+                     .WithMany(c => c.Skills)
                      .HasForeignKey(c => c.CreatureId)
                      .OnDelete(DeleteBehavior.NoAction);
             });
@@ -93,14 +93,13 @@ namespace BlazorFormSample.Server.Data
 
             modelBuilder.Entity<CreatureAttribute>(entity =>
             {
-                entity.HasOne("Attribute")
+                entity.HasOne(c => c.Attribute)
                      .WithMany()
-                     .HasForeignKey("AttributeId")
                      .OnDelete(DeleteBehavior.NoAction);
 
-                entity.HasOne("Creature")
-                     .WithMany()
-                     .HasForeignKey("CreatureId")
+                entity.HasOne(c=> c.Creature)
+                     .WithMany(c => c.Attributes)
+                     .HasForeignKey(c => c.CreatureId)
                      .OnDelete(DeleteBehavior.NoAction);
             });
 

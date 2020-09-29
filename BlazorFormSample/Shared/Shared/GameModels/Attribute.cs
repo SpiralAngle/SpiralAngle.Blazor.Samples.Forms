@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BlazorFormSample.Shared.GameModels
@@ -8,6 +9,7 @@ namespace BlazorFormSample.Shared.GameModels
     public class Attribute : IEntity
     {
         [Key]
+        [Column("AttributeId")]
         public Guid Id { get; set; }
 
         [Required]
@@ -30,6 +32,8 @@ namespace BlazorFormSample.Shared.GameModels
         [CustomValidation(typeof(Attribute), "ValidateModifiedMaximum")]
         public decimal ModifiedMaximum { get; set; }
 
+        [Required]
+        public decimal Order { get; set; }
 
         public static ValidationResult ValidateModifiedMinimum(decimal value, ValidationContext validationContext)
         {
