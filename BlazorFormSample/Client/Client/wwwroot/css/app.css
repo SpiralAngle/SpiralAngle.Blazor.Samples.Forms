@@ -210,9 +210,6 @@ app > .footer {
             filter: brightness(150%);
         }
 
-.form-control, .form-control-sm, .form-control-lg{
-    border-style:solid;
-}
 
     .form-control:disabled, .form-control-sm:disabled, .form-control-lg:disabled {
         border-color: white;
