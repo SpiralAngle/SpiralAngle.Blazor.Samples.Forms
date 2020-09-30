@@ -1,4 +1,5 @@
 ﻿using BlazorFormSample.Server.Data;
+using BlazorFormSample.Shared.CreatureModels;
 using BlazorFormSample.Shared.GameModels;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
@@ -25,6 +26,11 @@ namespace BlazorFormSample.Server.Tests.Utility
     {
         public static Guid GameSystemId => new Guid("10000000-0000-0000-0000-000000000000");
         public static Guid SkillGroupId => new Guid("10000000-1000-0000-0000-000000000000");
+        public static Guid SkillId => new Guid("10000000-1000-1000-0000-000000000000");
+        public static Guid RaceId => new Guid("10000000-2000-0000-0000-000000000000");
+        public static Guid Roleid => new Guid("10000000-3000-0000-0000-000000000000");
+        public static Guid AttributeId => new Guid("10000000-4000-0000-0000-000000000000");
+        public static Guid CreatureId => new Guid("20000000-1000-0000-0000-000000000000");
 
         private static readonly object _lock = new object();
         private static bool _databaseInitialized;
@@ -85,8 +91,8 @@ namespace BlazorFormSample.Server.Tests.Utility
                                 Id = GameSystemId,
                                 Name = "Name1",
                                 Version = "Version1",
-                                Roles = new List<Role> { new Role { Name = "ro1", GameSystemId = GameSystemId } },
-                                Races = new List<Race> { new Race { Name = "ra1", GameSystemId = GameSystemId } },
+                                Roles = new List<Role> { new Role {Id = Roleid, Name = "ro1", GameSystemId = GameSystemId } },
+                                Races = new List<Race> { new Race {Id = RaceId, Name = "ra1", GameSystemId = GameSystemId } },
                                 Attributes = new List<BlazorFormSample.Shared.GameModels.Attribute> {
                                     new BlazorFormSample.Shared.GameModels.Attribute { Name ="at1", GameSystemId = GameSystemId } },
                                 SkillGroups = new List<SkillGroup>
@@ -98,14 +104,13 @@ namespace BlazorFormSample.Server.Tests.Utility
                                         GameSystemId = GameSystemId,
                                         Skills = new List<Skill>
                                         {
-                                            new Skill { Name= "sk1" }
+                                            new Skill { Id = SkillId, Name= "sk1" }
                                         }
                                     }
                                 }
                             };
-
                             context.Add(system1);
-                            context.SaveChanges();
+                            context.SaveChanges();                        
                         }
                         _databaseInitialized = true;
                     }

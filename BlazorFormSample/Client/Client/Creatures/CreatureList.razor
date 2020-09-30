@@ -20,7 +20,8 @@
                         <NavLink href="@GetEntityLink(creature)" Match="NavLinkMatch.Prefix" role="navigation" aria-label="Go to Creature"><span>@creature.Name</span></NavLink>
                     </h5>
                     <div class="card-subtitle">
-                        <span>@creature.Race?.Name</span><span>@creature.Role?.Name</span>
+                        <div>@($"{creature.GameSystem?.Name} ({creature.GameSystem?.Version})")</div>
+                        <div><span>@creature.Race?.Name</span>&nbsp<span>@creature.Role?.Name</span></div>
                     </div>
                 </div>
 

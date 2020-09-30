@@ -1,6 +1,7 @@
 ﻿using BlazorFormSample.Server.Data;
 using BlazorFormSample.Server.Shared;
 using BlazorFormSample.Shared.CreatureModels;
+using BlazorFormSample.Shared.GameModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,15 @@ namespace BlazorFormSample.Server.CreatureApi
     {
         public CreatureProvider(CreatureDbContext context) : base(context)
         {
+        }
+
+        public override async Task<IEnumerable<Creature>> GetListAsync()
+        {
+            return await Context.Set<Creature>()
+                .Include(x => x.GameSystem)
+                .Include(x => x.Role)
+                .Include(x => x.Race)
+                .ToListAsync();
         }
 
         protected override async Task<Creature> GetEntityAsync(Guid id)
