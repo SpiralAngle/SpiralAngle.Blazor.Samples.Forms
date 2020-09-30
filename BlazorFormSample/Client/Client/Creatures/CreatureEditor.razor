@@ -152,6 +152,10 @@
 
     private async Task SetModelAsync()
     {
+        if (CreatureEditModel?.GameSystem != null && EditModel.Model.GameSystemId == CreatureEditModel.GameSystem.Id)
+        {
+            return;
+        }
         if (EditModel?.Model != null && EditModel?.Model.GameSystemId != default(Guid))
         {
             CreatureEditModel.GameSystem = await GameSystemService.GetAsync(EditModel.Model.GameSystemId);
