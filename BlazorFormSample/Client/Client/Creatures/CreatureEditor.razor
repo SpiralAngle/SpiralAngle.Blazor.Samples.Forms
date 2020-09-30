@@ -65,7 +65,7 @@
                 {
                     @foreach (var attr in EditModel.Model.Attributes.OrderBy(x => x.Attribute.Order))
                     {
-                        <div class="form-row">
+                        <div class="form-row pl-1">
                             <label class="col-3 align-middle col-form-label-sm" label-for="@attr.Attribute.Name">@attr.Attribute.Name</label>
                             <InputNumber class="form-control col-2 align-middle" id="@attr.Attribute.Name" @bind-Value="attr.Value" @bind-disabled="ReadOnly" min="@(attr.Attribute.Minimum.ToString())" max="@(attr.Attribute.Maximum.ToString())"></InputNumber>
                         </div>
@@ -77,10 +77,10 @@
                 {
                     @foreach (var skillGroup in CreatureEditModel.GameSystem.SkillGroups.OrderBy(x => x.Name))
                     {
-                        <div class="form-row">@skillGroup.Name</div>
+                        <div class="form-row pl-1 font-weight-bold">@skillGroup.Name</div>
                         @foreach (var skill in EditModel.Model.Skills.Where(x => x.Skill.SkillGroupId == skillGroup.Id).OrderBy(x => x.Skill.Name))
                         {
-                            <div class="form-row">
+                            <div class="form-row pl-3">
                                 <label class="col-3 align-middle col-form-label-sm" label-for="@skill.Skill.Name">@skill.Skill.Name</label>
                                 <InputNumber class="form-control col-2 align-middle" id="@skill.Skill.Name" @bind-Value="skill.Rank" @bind-disabled="ReadOnly"></InputNumber>
                             </div>

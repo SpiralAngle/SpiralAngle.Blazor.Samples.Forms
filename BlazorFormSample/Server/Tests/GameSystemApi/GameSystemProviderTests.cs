@@ -114,7 +114,6 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
             const string newSkillName = "sk15";
             const string skillGroup2Name = "sg2";
             const string skill2Name = "sk2";
-
             Guid gameSystemId = new Guid("10000000-0000-0000-0000-000000000000");
             using (var transaction = Fixture.Connection.BeginTransaction())
             {
@@ -141,7 +140,7 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
 
                     await entityProvider.UpdateAsync(system);
 
-                    var retrievedSystem = await entityProvider.GetAsync(new Guid("10000000-0000-0000-0000-000000000000"));
+                    var retrievedSystem = await entityProvider.GetAsync(gameSystemId);
                     Assert.True(retrievedSystem.Roles.Count == 1);
                     Assert.Equal(newRoleName, retrievedSystem.Roles.FirstOrDefault()?.Name);
                     Assert.Equal(newSkillName, retrievedSystem.SkillGroups.FirstOrDefault(x => x.Name == "sg1").Skills.FirstOrDefault().Name);
@@ -153,22 +152,57 @@ namespace BlazorFormSample.Server.Tests.GameSystemApi
         [Fact]
         public async Task Delete_Deletes()
         {
+            var gameId = Guid.NewGuid();
+            using (var transaction = Fixture.Connection.BeginTransaction())
+            {
+                using (var context = Fixture.CreateContext(transaction))
+                {
+                    
+                    var skillGroupId = Guid.NewGuid();
+                    const string expectedRace = "ra1";
+                    const string expectedRole = "ro1";
+                    const string expectedSkillGroup = "sg1";
+                    const string expectedSkill = "sk1";
+                    IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
+                    GameSystem system = new GameSystem
+                    {
+                        Id = gameId,
+                        Name = "Name",
+                        Version = "Version",
+                        Roles = new List<Role> { new Role { Name = expectedRole, GameSystemId = gameId } },
+                        Races = new List<Race> { new Race { Name = expectedRace, GameSystemId = gameId } },
+                        SkillGroups = new List<SkillGroup>
+                        {
+                            new SkillGroup
+                            {
+                                Name = expectedSkillGroup,
+                                Id = skillGroupId,
+                                Skills = new List<Skill>
+                                {
+                                    new Skill { Name= expectedSkill, SkillGroupId = skillGroupId }
+                                }
+                            }
+                        }
+                    };
+                    context.Add(system);
+                    await context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+            }
             using (var transaction = Fixture.Connection.BeginTransaction())
             {
                 using (var context = Fixture.CreateContext(transaction))
                 {
                     IEntityProvider<GameSystem> entityProvider = new GameSystemProvider(context);
-                    Guid id = new Guid("10000000-0000-0000-0000-000000000000");
-                    var result = await entityProvider.DeleteAsync(id);
+                    var result = await entityProvider.DeleteAsync(gameId);
 
-                    var retrievedSystem = await entityProvider.GetAsync(id);
+                    var retrievedSystem = await entityProvider.GetAsync(gameId);
 
                     Assert.True(result);
                     Assert.Null(retrievedSystem);
                 }
-                await transaction.RollbackAsync();
             }
-        }        
+        }
     }
 
 }
