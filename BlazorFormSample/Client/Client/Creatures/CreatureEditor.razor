@@ -31,13 +31,13 @@
         </div>
         <div class="form-row">
 
-            @if (SelectedGameSystem != null)
+            @if (CreatureEditModel.GameSystem != null)
             {
                 <label class="col-1 align-middle form-label-sm" label-for="race">Race</label>
                 <InputFlexSelect class="form-control-sm col-2 align-middle" id="race" @bind-Value="EditModel.Model.RaceId" @bind-disabled="ReadOnly">
                     <option value=""></option>
 
-                    @foreach (var race in SelectedGameSystem.Races)
+                    @foreach (var race in CreatureEditModel.GameSystem.Races)
                     {
                         <option value="@race.Id">@race.Name</option>
                     }
@@ -47,7 +47,7 @@
                 <InputFlexSelect class="form-control-sm col-2 align-middle" id="role" @bind-Value="EditModel.Model.RoleId" @bind-disabled="ReadOnly">
                     <option value=""></option>
 
-                    @foreach (var role in SelectedGameSystem.Roles)
+                    @foreach (var role in CreatureEditModel.GameSystem.Roles)
                     {
                         <option value="@role.Id">@role.Name</option>
                     }
@@ -59,18 +59,35 @@
                 <div class="col-3 font-italic">Select a Game System</div>
             }
         </div>
-
-        <fieldset>
-            @foreach (var attr in EditModel.Model.Attributes)
-            {
-                <div class="form-row">
-                    <label class="col-1 align-middle col-form-label-sm" label-for="@attr.Attribute.Name">@attr.Attribute.Name</label>
-                    <InputNumber class="form-control col-2 align-middle" id="@attr.Attribute.Name" @bind-Value="attr.Value" @bind-disabled="ReadOnly" min="@(attr.Attribute.Minimum.ToString())" max="@(attr.Attribute.Maximum.ToString())"></InputNumber>
-                </div>
-            }
-        </fieldset>
-
         <div class="card-columns">
+            <div class="card">
+                @if (CreatureEditModel?.GameSystem != null)
+                {
+                    @foreach (var attr in EditModel.Model.Attributes.OrderBy(x => x.Attribute.Order))
+                    {
+                        <div class="form-row">
+                            <label class="col-3 align-middle col-form-label-sm" label-for="@attr.Attribute.Name">@attr.Attribute.Name</label>
+                            <InputNumber class="form-control col-2 align-middle" id="@attr.Attribute.Name" @bind-Value="attr.Value" @bind-disabled="ReadOnly" min="@(attr.Attribute.Minimum.ToString())" max="@(attr.Attribute.Maximum.ToString())"></InputNumber>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="card">
+                @if (CreatureEditModel?.GameSystem != null)
+                {
+                    @foreach (var skillGroup in CreatureEditModel.GameSystem.SkillGroups.OrderBy(x => x.Name))
+                    {
+                        <div class="form-row">@skillGroup.Name</div>
+                        @foreach (var skill in EditModel.Model.Skills.Where(x => x.Skill.SkillGroupId == skillGroup.Id).OrderBy(x => x.Skill.Name))
+                        {
+                            <div class="form-row">
+                                <label class="col-3 align-middle col-form-label-sm" label-for="@skill.Skill.Name">@skill.Skill.Name</label>
+                                <InputNumber class="form-control col-2 align-middle" id="@skill.Skill.Name" @bind-Value="skill.Rank" @bind-disabled="ReadOnly"></InputNumber>
+                            </div>
+                        }
+                    }
+                }
+            </div>
             <div class="card">
                 <label class="align-middle form-label" label-for="Description">Description</label>
                 <InputTextArea class="form-control" id="description" @bind-Value="EditModel.Model.Description" @bind-disabled="ReadOnly"></InputTextArea>
@@ -107,7 +124,7 @@
 
     public override string BaseUri => "/creature";
     IEnumerable<GameSystem> GameSystems { get; set; }
-    protected GameSystem SelectedGameSystem { get; private set; }
+    protected CreatureEditModel CreatureEditModel { get; private set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -116,6 +133,11 @@
         EditModel.OnModelSet += ModelSet;
         await SetModelAsync();
         EditModel.EditContext.OnFieldChanged += FieldChanged;
+    }
+    protected override EditModel<Creature> InitializeEditModel()
+    {
+        CreatureEditModel = new CreatureEditModel(EntityService, GameSystemService);
+        return CreatureEditModel;
     }
 
     private void AddItem()
@@ -132,11 +154,11 @@
     {
         if (EditModel?.Model != null && EditModel?.Model.GameSystemId != default(Guid))
         {
-            SelectedGameSystem = await GameSystemService.GetAsync(EditModel.Model.GameSystemId);
+            CreatureEditModel.GameSystem = await GameSystemService.GetAsync(EditModel.Model.GameSystemId);
         }
         else
         {
-            SelectedGameSystem = null;
+            CreatureEditModel.GameSystem = null;
         }
         await InvokeAsync(StateHasChanged);
     }
@@ -145,9 +167,16 @@
     {
         await SetModelAsync();
         EditModel.Model.Attributes.Clear();
-        foreach (var attr in SelectedGameSystem.Attributes)
+        foreach (var attr in CreatureEditModel.GameSystem.Attributes)
         {
-            EditModel.Model.Attributes.Add(new CreatureAttribute { Attribute = attr, AttributeId = attr.Id, CreatureId = EditModel.Model.Id });
+            CreatureEditModel.Model.Attributes.Add(new CreatureAttribute { Attribute = attr, AttributeId = attr.Id, CreatureId = EditModel.Model.Id });
+        }
+        foreach (var skillGroup in CreatureEditModel.GameSystem.SkillGroups)
+        {
+            foreach (var skill in skillGroup.Skills)
+            {
+                EditModel.Model.Skills.Add(new CreatureSkill { Skill = skill, SkillId = skill.Id, CreatureId = CreatureEditModel.Model.Id });
+            }
         }
         await InvokeAsync(StateHasChanged);
     }

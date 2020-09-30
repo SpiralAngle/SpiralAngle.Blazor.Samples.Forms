@@ -41,7 +41,7 @@ namespace BlazorFormSample.Client.SharedComponent
 
         void CancelDelete();
 
-        void Delete();
+        void RequestDelete();
 
         Task DeleteConfirmedAsync();
 

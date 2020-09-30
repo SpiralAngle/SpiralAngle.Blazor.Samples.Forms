@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BlazorFormSample.Client.SharedComponent
 {
-    public abstract class EntityEditorBase<TEntity> : ComponentBase, IDisposable where TEntity : class, IEntity, new()
+    public abstract class EntityEditorBase<TEntity> : ComponentBase, IDisposable where TEntity : class, IEntity, new() 
     {
         [Parameter]
         public string EntityId { get; set; }
@@ -42,17 +42,19 @@ namespace BlazorFormSample.Client.SharedComponent
         {
             ReadOnly = true;
             WasFromNew = new Uri(NavigationManager.Uri).Segments.Last() == "new";
-            EditModel = new EditModel<TEntity>(EntityService);
+            EditModel =  InitializeEditModel();
             EditModel.ModelDeleted += ModelDeleted;
             EditModel.ModelSaved += ModelSaved;
             EditModel.EditCanceled += EditCanceled;
             EditModel.EditStarted += EditStarted;
             await EditModel.InitializeEditorAsync(WasFromNew ? default : new Guid(EntityId));
             ReadOnly = !WasFromNew;
-
-            //await base.OnParametersSetAsync();
         }
 
+        protected virtual EditModel<TEntity> InitializeEditModel()
+        {
+            return new EditModel<TEntity>(EntityService);
+        }
 
         private void ModelSaved(TEntity model)
         {

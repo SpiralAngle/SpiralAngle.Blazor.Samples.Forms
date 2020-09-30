@@ -66,6 +66,7 @@ namespace BlazorFormSample.Client.SharedComponent
             {
                 WasFromNew = false;
                 Model = await Service.GetAsync(id);
+                await ExtendedLoadModel();
                 ReadOnly = true;
             }
             if (EditContext != null)
@@ -75,6 +76,11 @@ namespace BlazorFormSample.Client.SharedComponent
             EditContext = new EditContext(Model);
             EditContext.OnFieldChanged += FieldChanged;
             OnModelSet?.Invoke(Model);
+        }
+
+        protected virtual Task ExtendedLoadModel()
+        {
+            return Task.CompletedTask;
         }
 
         private void FieldChanged(object sender, FieldChangedEventArgs e)
@@ -97,7 +103,7 @@ namespace BlazorFormSample.Client.SharedComponent
             ConfirmDelete = false;
         }
 
-        public void Delete()
+        public void RequestDelete()
         {
             ConfirmDelete = true;
         }
