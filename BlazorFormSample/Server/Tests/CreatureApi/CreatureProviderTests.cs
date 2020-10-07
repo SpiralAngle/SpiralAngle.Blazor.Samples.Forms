@@ -18,7 +18,6 @@ namespace BlazorFormSample.Server.Tests.CreatureApi
         public CreatureDbContextFixture Fixture { get; }
 
         public CreatureProviderTests(CreatureDbContextFixture fixture) => Fixture = fixture;
-        // public CreatureProviderTests() => Fixture = new CreatureDbContextFixture();
 
         [Fact]
         public async Task Add_Adds()

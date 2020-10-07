@@ -92,15 +92,15 @@
                 </div>
                 @foreach (var item in editModel.Model.Attributes.OrderBy(x => x.Order))
                 {
-            <div class="form-row">
-                <InputText class="form-control form-control-sm col-2 align-left" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
-                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMinimum" @bind-disabled="readOnly"></InputNumber>
-                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Minimum" @bind-disabled="readOnly"></InputNumber>
-                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Maximum" @bind-disabled="readOnly"></InputNumber>
-                <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMaximum" @bind-disabled="readOnly"></InputNumber>
-                <InputNumber class="form-control form-control-sm col-1 align-middle" @bind-Value="item.Order" @bind-disabled="readOnly"></InputNumber>
-                <span class="oi oi-trash col-1" aria-label="Remove Attribute" @onclick="x => RemoveAttribute(item)" hidden="@(readOnly)"></span>
-            </div>
+                    <div class="form-row">
+                        <InputText class="form-control form-control-sm col-2 align-left" @bind-Value="item.Name" @bind-disabled="readOnly"></InputText>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMinimum" @bind-disabled="readOnly"></InputNumber>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Minimum" @bind-disabled="readOnly"></InputNumber>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.Maximum" @bind-disabled="readOnly"></InputNumber>
+                        <InputNumber class="form-control form-control-sm col-2 align-middle" @bind-Value="item.ModifiedMaximum" @bind-disabled="readOnly"></InputNumber>
+                        <InputNumber class="form-control form-control-sm col-1 align-middle" @bind-Value="item.Order" @bind-disabled="readOnly"></InputNumber>
+                        <span class="oi oi-trash col-1" aria-label="Remove Attribute" @onclick="x => RemoveAttribute(item)" hidden="@(readOnly)"></span>
+                    </div>
                 }
             </PropertyCard>
             <div class="card">
@@ -200,7 +200,7 @@
             Minimum = last.Minimum,
             Maximum = last.Maximum,
             ModifiedMaximum = last.ModifiedMaximum,
-            Order= maxOrder + 1
+            Order = maxOrder + 1
         });
     }
 

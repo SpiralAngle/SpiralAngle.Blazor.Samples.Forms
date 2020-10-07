@@ -59,8 +59,11 @@
                 <div class="col-3 font-italic">Select a Game System</div>
             }
         </div>
-        <div class="card-columns">
+        <div class="card-group">
             <div class="card">
+                <div class="card-header">
+                    <h4>Attributes</h4>
+                </div>
                 @if (CreatureEditModel?.GameSystem != null)
                 {
                     @foreach (var attr in EditModel.Model.Attributes.OrderBy(x => x.Attribute.Order))
@@ -73,6 +76,9 @@
                 }
             </div>
             <div class="card">
+                <div class="card-header">
+                    <h4>Skills</h4>
+                </div>
                 @if (CreatureEditModel?.GameSystem != null)
                 {
                     @foreach (var skillGroup in CreatureEditModel.GameSystem.SkillGroups.OrderBy(x => x.Name))
@@ -89,10 +95,15 @@
                 }
             </div>
             <div class="card">
-                <label class="align-middle form-label" label-for="Description">Description</label>
+                <div class="card-header">
+                    <h4 class="align-middle form-label" label-for="Description">Description</h4>
+                </div>
                 <InputTextArea class="form-control" id="description" @bind-Value="EditModel.Model.Description" @bind-disabled="ReadOnly"></InputTextArea>
             </div>
             <div class="card">
+                <div class="card-header">
+                    <h4>Inventory</h4>
+                </div>
                 <div class="card-body">
                     <div class="container">
                         <div class="form-row">
