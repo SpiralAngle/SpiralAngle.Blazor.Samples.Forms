@@ -18,14 +18,16 @@ $color-secondary-2-2: #FF5936;
 $color-secondary-2-3: #A31C00;
 $color-secondary-2-4: #460C00;
 
-@import "../wwwroot/css/open-iconic/font/css/open-iconic-bootstrap.min.css";
+
+
+@import "./open-iconic/font/css/open-iconic-bootstrap.min.css";
     
     html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 a, .btn-link {
-    color: #0366d6;
+    color: $color-primary-3;
 }
 
 app {
@@ -278,7 +280,7 @@ app > .footer {
 }
 
 .validation-message {
-    color: red;
+    color: $color-secondary-2-2;
 }
 
 textarea.form-control {

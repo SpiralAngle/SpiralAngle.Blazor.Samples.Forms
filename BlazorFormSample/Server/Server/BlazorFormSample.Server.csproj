@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -35,8 +35,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Client\Client\BlazorFormSample.Client.csproj" />
-    <ProjectReference Include="..\..\Shared\Shared\BlazorFormSample.Shared.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared\BlazorFormSample.Shared.csproj"/>
   </ItemGroup>
-
+  <ItemGroup>
+    <Watch Include="**\*.cs" />
+    <Watch Include="**\*.scss" />
+    <Watch Include="**\*.razor" />
+  </ItemGroup>
 
 </Project>
