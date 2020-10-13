@@ -140,3 +140,6 @@ I hope to see someone (maybe me) build out deployment automation that will strea
 
 If you have problems, make sure you followed the instructions EXACTLY.
 
+### Styles
+
+This does make use of Sass. You will need <https://github.com/excubo-ag/WebCompiler> installed. Pay close attention!

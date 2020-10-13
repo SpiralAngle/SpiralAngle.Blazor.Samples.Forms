@@ -1,0 +1,352 @@
+﻿$primaryShadowColor: rgba( 1, 33, 44,.5);
+
+$color-primary-0: #056F92; // Main Primary color */
+$color-primary-1: #60B8D5;
+$color-primary-2: #2B90B1;
+$color-primary-3: #034D66;
+$color-primary-4: #01212C;
+
+$color-secondary-1-0: #EAA400; // Main Secondary color (1) */
+$color-secondary-1-1: #FFD46E;
+$color-secondary-1-2: #FFC336;
+$color-secondary-1-3: #A37200;
+$color-secondary-1-4: #463100;
+
+$color-secondary-2-0: #EA2900; // Main Secondary color (2) */
+$color-secondary-2-1: #FF876E;
+$color-secondary-2-2: #FF5936;
+$color-secondary-2-3: #A31C00;
+$color-secondary-2-4: #460C00;
+
+@import "../wwwroot/css/open-iconic/font/css/open-iconic-bootstrap.min.css";
+    
+    html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+a, .btn-link {
+    color: #0366d6;
+}
+
+app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-primary {
+    color: $color-primary-4;
+    background-color: $color-primary-1;
+    border: none;
+}
+
+    .btn-primary:hover {
+        color: $color-primary-1;
+        background-color: $color-primary-4;
+        border: none;
+    }
+
+    .btn-primary:disabled {
+        color: $color-primary-4;
+        background-color: $color-primary-1;
+        border: none;
+        filter: brightness(150%);
+    }
+
+.btn-secondary {
+    color: $color-primary-4;
+    background-color: $color-secondary-1-1;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        color: white;
+        background-color: $color-secondary-1-4;
+        border: none;
+    }
+
+.btn-outline-danger {
+    color: $color-secondary-2-3;
+    background: none;
+    border-color: $color-secondary-2-3;
+    border-width: 1px;
+    border-style: solid;
+}
+
+    .btn-outline-danger:hover {
+        color: white;
+        background: $color-secondary-2-3;
+        border-color: $color-secondary-2-3;
+        border-width: 1px;
+        border-style: solid;
+    }
+
+.btn-danger {
+    color: white;
+    background-color: $color-secondary-2-3;
+    border-color: $color-secondary-2-3;
+    border-width: 1px;
+    border-style: solid;
+}
+
+    .btn-danger:hover {
+        color: $color-secondary-1-1;
+        background: $color-secondary-2-3;
+        border-color: $color-secondary-1-1;
+        border-width: 1px;
+        border-style: solid;
+    }
+
+.top-row {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.main {
+    flex: 1;
+    background-color: $color-primary-4;
+}
+
+    .main .top-row {
+        background-color: $color-primary-4;
+        border-bottom: 1px solid $color-primary-4;
+        justify-content: flex-end;
+        color: $color-primary-1;
+    }
+
+        .main .top-row > a, .main .top-row .btn-link {
+            white-space: nowrap;
+            margin-left: 1.5rem;
+            color: $color-primary-1;
+        }
+
+        .main .top-row a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+     .card {
+        min-width: 660px;
+        max-width: 700px;
+    }
+
+.sidebar {
+    background-image: linear-gradient(180deg, $color-primary-4 0%, $color-primary-4 4rem, $color-primary-1 100%);
+}
+
+    .sidebar .top-row {
+        background-color: $color-primary-4;
+        /*opacity: 0.7;*/
+    }
+
+    .sidebar .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    .sidebar .oi {
+        width: 2rem;
+        font-size: 1.1rem;
+        vertical-align: text-top;
+        top: -2px;
+    }
+
+    .sidebar .nav-item {
+        font-size: 0.9rem;
+        padding-bottom: 0.5rem;
+    }
+
+        .sidebar .nav-item:first-of-type {
+            padding-top: 1rem;
+        }
+
+        .sidebar .nav-item:last-of-type {
+            padding-bottom: 1rem;
+        }
+
+        .sidebar .nav-item a {
+            color: #d7d7d7;
+            border-radius: 4px;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            line-height: 3rem;
+        }
+
+            .sidebar .nav-item a.active {
+                background-color: rgba(255,255,255,0.25);
+                color: white;
+            }
+
+            .sidebar .nav-item a:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+            }
+
+.content {
+    padding-top: 1.1rem;
+    box-shadow: inset 5px 5px 5px #02495a;
+    box-shadow: inset 3px 3px 3px rgba( 2, 73, 90,.5);
+    height: calc(100vh - 3.5REM);
+    border-radius: 5px 0 0 0;
+    background-color: white;
+}
+
+.content a {
+        color: $color-primary-4;
+    }
+
+.card {
+    box-shadow: 3px 3px 3px #02495a;
+    box-shadow: 3px 3px 3px rgba( 2, 73, 90,.5);
+    padding: 3px;  
+}
+
+
+.card-header, .card-footer {
+    background-color: #034D66;
+    color: white;
+}
+
+    .card-header a, .card-footer a {
+        color: $color-primary-1;
+        filter: brightness(200%);
+    }
+
+    .card-header h4 {
+        color: $color-primary-1;
+        filter: brightness(200%);
+        display: inline;
+        margin-right: 1ch;
+        vertical-align: middle;
+    }
+
+    .card-header .btn-toolbar {
+        display: inline;
+    }
+.card-subtitle{
+    font-size:0.75em;
+    padding-left:2ch;
+}
+
+.card-body {
+    box-shadow: inset 2px 2px 5px #02495a;
+    box-shadow: inset 2px 2px 5px $primaryShadowColor;
+}
+
+app > .footer {
+    text-align: right;
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+    app > .footer a, app > .footer a:visited, app > .footer a:link {
+        color: $color-secondary-2-3;
+    }
+
+        app > .footer a:hover {
+            color: $color-secondary-2-3;
+            filter: brightness(150%);
+        }
+
+
+    .form-control:disabled, .form-control-sm:disabled, .form-control-lg:disabled {
+        border-color: white;
+        background: none;
+        border-style: solid;
+    }
+
+.form-row .grid-head > span {
+    font-size:0.5em
+}
+
+.game-description-truncated {
+    max-height: 20ex;
+    overflow: hidden;
+}
+
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+textarea.form-control {
+    line-height: 1.3em;
+    height: 13em;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+@media (max-width: 767.98px) {
+    .main .top-row:not(.auth) {
+        display: none;
+    }
+
+    .main .top-row.auth {
+        justify-content: space-between;
+    }
+
+    .main .top-row a, .main .top-row .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    app {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .main .top-row {
+        position: sticky;
+        top: 0;
+    }
+
+    .main > div {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+
+    .sidebar .collapse {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+    }
+}
