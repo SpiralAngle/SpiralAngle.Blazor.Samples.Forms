@@ -1,10 +1,9 @@
-﻿/*#60B8D5*/
-@import url(../wwwroot/css/open-iconic/font/css/open-iconic-bootstrap.min.css);
+﻿@import url(./open-iconic/font/css/open-iconic-bootstrap.min.css);
 html, body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
 a, .btn-link {
-  color: #0366d6; }
+  color: #034D66; }
 
 app {
   position: relative;
@@ -203,8 +202,8 @@ app {
 .card-body {
   -webkit-box-shadow: inset 2px 2px 5px #02495a;
           box-shadow: inset 2px 2px 5px #02495a;
-  -webkit-box-shadow: inset 2px 2px 5px rgba(2, 73, 90, 0.5);
-          box-shadow: inset 2px 2px 5px rgba(2, 73, 90, 0.5); }
+  -webkit-box-shadow: inset 2px 2px 5px rgba(1, 33, 44, 0.5);
+          box-shadow: inset 2px 2px 5px rgba(1, 33, 44, 0.5); }
 
 app > .footer {
   text-align: right;
@@ -241,7 +240,7 @@ app > .footer a:hover {
   outline: 1px solid red; }
 
 .validation-message {
-  color: red; }
+  color: #FF5936; }
 
 textarea.form-control {
   line-height: 1.3em;

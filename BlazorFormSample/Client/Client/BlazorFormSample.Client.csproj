@@ -28,10 +28,16 @@
     <ProjectReference Include="..\..\..\SpiralAngle.Blazor.Extensions\SpiralAngle.Blazor.Extensions.csproj" />
     <ProjectReference Include="..\..\Shared\Shared\BlazorFormSample.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Watch Include="**\*.cs" />
+    <Watch Include="**\*.scss" />
+    <Watch Include="**\*.razor" />
+  </ItemGroup>
   <Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
     <Exec Command="dotnet tool restore" StandardOutputImportance="high" />
   </Target>
   <Target Name="PreBuild" AfterTargets="ToolRestore">
     <Exec Command="dotnet tool run webcompiler -r wwwroot" StandardOutputImportance="high" />
   </Target>
+  
 </Project>
